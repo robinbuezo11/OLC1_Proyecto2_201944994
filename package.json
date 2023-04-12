@@ -1,0 +1,15 @@
+{
+  "name": "olc1_proyecto2_201944994",
+  "version": "1.0.0",
+  "description": "Proyecto 2 del curso de Organización de Lenguajes y Compiladores 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jison": "^0.4.18"
+  }
+}
