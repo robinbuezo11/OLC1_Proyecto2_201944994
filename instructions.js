@@ -99,7 +99,7 @@ const instruccionesAPI = {
         return {
             tipo: TIPO_INSTRUCCION.DECLARACION,
             identificador: identificador,
-            tipo_dato: tipo_dato
+            tipo_dato: tipo
         };
     },
 
