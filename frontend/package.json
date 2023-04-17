@@ -11,7 +11,7 @@
     "edit": "^1.0.2",
     "monaco": "^1.201704190613.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.3",
+    "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-monaco-editor": "^0.52.0",
     "react-scripts": "5.0.1",

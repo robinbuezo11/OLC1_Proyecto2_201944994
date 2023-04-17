@@ -1,24 +1,26 @@
 import './App.css';
-import { useState } from 'react';
+import  { useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
-
 function App() {
   const [code, setCode] = useState('');
   const [resultado, setResultado] = useState('');
   function analizar(){
-    axios.post('http://localhost:5000/analizar', {
-      entrada: code
+    axios.post('http://localhost:5000/analyzer', {
+      input: code
     })
     .then(function (response) {
       console.log(response);
-      setResultado(response.data.resultado);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+      setResultado(response.data.result);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  function graphAST(){
+    axios.get('http://localhost:5000/graphAST');
   }
   return (
     <div className="App">
@@ -49,6 +51,9 @@ function App() {
         </div>
           <div>
             <Button variant="primary" classname="boton" onClick={()=>{analizar()} }>Analizar</Button>
+          </div>
+          <div>
+            <Button variant="primary" classname="boton" onClick={()=>{graphAST()}}>Generar AST</Button>
           </div>
         </div>
       </header>
