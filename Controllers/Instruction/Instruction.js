@@ -72,6 +72,14 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newIf: function(_expression, _instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.IF,
+            expression: _expression,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
     }
 }
 

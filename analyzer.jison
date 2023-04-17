@@ -170,9 +170,12 @@ INSTRUCTIONS: INSTRUCTIONS INSTRUCTION {$$ = $1; $1.push($2);}
 INSTRUCTION: DEC_VAR semiColon {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT OF THE BODY
         |ASIG_VAR semiColon {$$=$1;}
         |PRINT {$$=$1;}
+        |IF {$$=$1;}
 
 ;
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}
+;
+IF: Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIf($3, $6, this._$.first_line,this._$.first_column+1)}
 ;
 EXPRESSION: EXPRESSION sum EXPRESSION{$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
          | EXPRESSION sub EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
