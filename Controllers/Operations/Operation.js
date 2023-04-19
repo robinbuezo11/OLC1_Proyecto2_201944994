@@ -10,9 +10,11 @@ function Operation(_exp, _scope){
     if( 
            _exp.type === VALUE_TYPE.DOUBLE || _exp.type === VALUE_TYPE.BOOL || _exp.type === VALUE_TYPE.INT 
         || _exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.CHAR || _exp.type === VALUE_TYPE.ID
-    ){
+        ){
         return ExpressionValue(_exp, _scope);
-    }else if(_exp.type === OPERATION_TYPE.ADD){
+    }else if(
+           _exp.type === OPERATION_TYPE.ADD || _exp.type === OPERATION_TYPE.SUB || _exp.type === OPERATION_TYPE.MUL
+        ){
         return Arithmetic(_exp, _scope);
     }else if(  
                _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS

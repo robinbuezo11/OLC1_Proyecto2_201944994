@@ -4,11 +4,11 @@ function resultType(_type1, _type2){
     if(
               (_type1 === DATA_TYPE.DOUBLE && _type2=== DATA_TYPE.DOUBLE)
             ||(_type1 === DATA_TYPE.INT && _type2=== DATA_TYPE.DOUBLE)
+            ||(_type1 === DATA_TYPE.BOOL && _type2=== DATA_TYPE.DOUBLE)
+            ||(_type1 === DATA_TYPE.CHAR && _type2=== DATA_TYPE.DOUBLE)
             ||(_type1 === DATA_TYPE.DOUBLE && _type2=== DATA_TYPE.INT)
             ||(_type1 === DATA_TYPE.DOUBLE && _type2=== DATA_TYPE.BOOL)
             ||(_type1 === DATA_TYPE.DOUBLE && _type2=== DATA_TYPE.CHAR)
-            ||(_type1 === DATA_TYPE.BOOL && _type2=== DATA_TYPE.DOUBLE)
-            ||(_type1 === DATA_TYPE.CHAR && _type2=== DATA_TYPE.DOUBLE)
         ){  
         return DATA_TYPE.DOUBLE;
     }

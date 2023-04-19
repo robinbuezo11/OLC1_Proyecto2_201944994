@@ -134,10 +134,10 @@ INSTRUCTIONSBODY
 ;
 
 BODY
-	: DEC_VAR semiColon {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT
-    |ASIG_VAR semiColon {$$=$1;}
-    |METHODS {$$=$1;}
-    |MAIN {$$=$1;} 
+	: DEC_VAR semiColon     {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT
+    |ASIG_VAR semiColon     {$$=$1;}
+    |METHODS                {$$=$1;}
+    |MAIN                   {$$=$1;} 
 
         
 ;
@@ -149,56 +149,56 @@ MAIN: Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, th
       
        
 ;
-DEC_VAR: TYPE id  {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
-        |TYPE id same EXPRESSION  {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
+DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
+        |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
         }
 
 ;
 ASIG_VAR: id same EXPRESSION {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}
         
 ;
-TYPE: Rint{$$= DATA_TYPE.INT}
-    |Rdouble{$$= DATA_TYPE.DOUBLE}
-    |Rchar {$$= DATA_TYPE.CHAR}
-    |Rboolean{$$= DATA_TYPE.BOOL}
-    |Rstring {$$= DATA_TYPE.STRING}
+TYPE: Rint      {$$= DATA_TYPE.INT}
+    |Rdouble    {$$= DATA_TYPE.DOUBLE}
+    |Rchar      {$$= DATA_TYPE.CHAR}
+    |Rboolean   {$$= DATA_TYPE.BOOL}
+    |Rstring    {$$= DATA_TYPE.STRING}
 ;
-INSTRUCTIONS: INSTRUCTIONS INSTRUCTION {$$ = $1; $1.push($2);}
-            |INSTRUCTION {$$ = [$1];}
+INSTRUCTIONS: INSTRUCTIONS INSTRUCTION  {$$ = $1; $1.push($2);}
+            |INSTRUCTION                {$$ = [$1];}
 
 ;
-INSTRUCTION: DEC_VAR semiColon {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT OF THE BODY
-        |ASIG_VAR semiColon {$$=$1;}
-        |PRINT {$$=$1;}
-        |IF {$$=$1;}
+INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT OF THE BODY
+        |ASIG_VAR semiColon     {$$=$1;}
+        |PRINT                  {$$=$1;}
+        |IF                     {$$=$1;}
 
 ;
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}
 ;
 IF: Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIf($3, $6, this._$.first_line,this._$.first_column+1)}
 ;
-EXPRESSION: EXPRESSION sum EXPRESSION{$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION sub EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION mul EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION div EXPRESSION   {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION pow EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION mod EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION less EXPRESSION    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
+EXPRESSION: EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION mul EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION div EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION pow EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION mod EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION less EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
          | EXPRESSION greater EXPRESSION    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATER,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION lessEq EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION greaterEq EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION diff EXPRESSION  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION and EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION or EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
-         | not EXPRESSION {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
-		 | sub EXPRESSION %prec usub {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
-         | parLeft EXPRESSION parRight {$$=$2}
-         | EXPRESSION equals EXPRESSION {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}
-         | double {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
-         | int {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
-         | Rtrue {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-         | Rfalse {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-         | string {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
-         | id{$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
-         | char {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION lessEq EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION greaterEq EXPRESSION  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
+         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
+         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
+		 | sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
+         | parLeft EXPRESSION parRight      {$$=$2}
+         | EXPRESSION equals EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}
+         | double                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
+         | int                              {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
+         | Rtrue                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+         | Rfalse                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+         | string                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
+         | id                               {$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
+         | char                             {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
 ;
