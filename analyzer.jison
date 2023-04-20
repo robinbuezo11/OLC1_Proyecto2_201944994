@@ -172,6 +172,8 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |PRINT                  {$$=$1;}
         |IF                     {$$=$1;}
 
+        |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+
 ;
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}
 ;

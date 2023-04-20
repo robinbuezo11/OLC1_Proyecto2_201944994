@@ -13,7 +13,9 @@ function Operation(_exp, _scope){
         ){
         return ExpressionValue(_exp, _scope);
     }else if(
-           _exp.type === OPERATION_TYPE.ADD || _exp.type === OPERATION_TYPE.SUB || _exp.type === OPERATION_TYPE.MUL
+               _exp.type === OPERATION_TYPE.ADD || _exp.type === OPERATION_TYPE.SUB || _exp.type === OPERATION_TYPE.MUL
+            || _exp.type === OPERATION_TYPE.DIV || _exp.type === OPERATION_TYPE.POW || _exp.type === OPERATION_TYPE.MOD
+            || _exp.type === OPERATION_TYPE.UNARY
         ){
         return Arithmetic(_exp, _scope);
     }else if(  

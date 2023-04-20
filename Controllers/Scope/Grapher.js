@@ -105,6 +105,7 @@ class Grapher{
             this.id++;
         } else if(
                        _expression.type === OPERATION_TYPE.ADD || _expression.type === OPERATION_TYPE.SUB || _expression.type === OPERATION_TYPE.MUL
+                    || _expression.type === OPERATION_TYPE.DIV || _expression.type === OPERATION_TYPE.POW || _expression.type === OPERATION_TYPE.MOD
                     || _expression.type === OPERATION_TYPE.EQUALS || _expression.type === OPERATION_TYPE.OR
             ){
             let value = `Node${this.id}`;
@@ -118,7 +119,7 @@ class Grapher{
             this.graph += value + `[label=\" ${_expression.type}\n ${this.getSymbol(_expression.type)}\"];\n`;
             this.graph += _parent + "->" + value + ";\n";
             this.id++;
-            this.graphOperation(_expression.opRight, value);
+            this.graphOperation(_expression.op, value);
         }
     }
     getSymbol(_type){
@@ -129,6 +130,12 @@ class Grapher{
                 return "-";
             case OPERATION_TYPE.MUL:
                 return "*";
+            case OPERATION_TYPE.DIV:
+                return "/";
+            case OPERATION_TYPE.POW:
+                return "^";
+            case OPERATION_TYPE.MOD:
+                return "%";
             case OPERATION_TYPE.UNARY:
                 return "-";
             case OPERATION_TYPE.EQUALS:

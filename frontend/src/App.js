@@ -50,10 +50,10 @@ function App() {
           </div>
         </div>
           <div>
-            <Button variant="primary" classname="boton" onClick={()=>{analizar()} }>Analizar</Button>
+            <Button variant="primary" className="boton" onClick={()=>{analizar()} }>Analizar</Button>
           </div>
           <div>
-            <Button variant="primary" classname="boton" onClick={()=>{graphAST()}}>Generar AST</Button>
+            <Button variant="primary" className="boton" onClick={()=>{graphAST()}}>Generar AST</Button>
           </div>
         </div>
       </header>

@@ -16,7 +16,15 @@ function Arithmetic(_exp, _scope){
     }else if(_exp.type === OPERATION_TYPE.SUB){
         return sub(_exp.opLeft, _exp.opRight, _scope);
     }else if(_exp.type === OPERATION_TYPE.MUL){
-        return mul(_exp.opLeft, _exp.opRight, _scope)
+        return mul(_exp.opLeft, _exp.opRight, _scope);
+    }else if(_exp.type === OPERATION_TYPE.DIV){
+        return div(_exp.opLeft, _exp.opRight, _scope);
+    }else if(_exp.type === OPERATION_TYPE.POW){
+        return pow(_exp.opLeft, _exp.opRight, _scope);
+    }else if(_exp.type === OPERATION_TYPE.MOD){
+        return mod(_exp.opLeft, _exp.opRight, _scope);
+    }else if(_exp.type === OPERATION_TYPE.UNARY){
+        return una(_exp.op, _scope);
     }
 }
 
@@ -222,6 +230,113 @@ function mul(_opLeft, _opRight, _scope){
         }
     }else{
         throw new Error(`No se puede multiplicar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+    }
+}
+
+function div(_opLeft, _opRight, _scope){
+    const opLeft = Arithmetic(_opLeft, _scope);
+    const opRight = Arithmetic(_opRight, _scope);
+
+    const typeresult = ResultType(opLeft.type, opRight.type);
+
+    if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
+        if(opRight.value != 0){
+            if(opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL){
+                throw new Error(`No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+            }else if(opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR){
+                if(opLeft.type === DATA_TYPE.CHAR){
+                    const result = Number((opLeft.value).charCodeAt(0)) / Number(opRight.value);
+                    return {
+                        value: result,
+                        type: DATA_TYPE.DOUBLE,
+                        line: _opLeft.line,
+                        column: _opLeft.column
+                    }
+                }else if(opRight.type === DATA_TYPE.CHAR){
+                    const result = Number(opLeft.value) / Number((opRight.value).charCodeAt(0));
+                    return {
+                        value: result,
+                        type: DATA_TYPE.DOUBLE,
+                        line: _opLeft.line,
+                        column: _opLeft.column
+                    }
+                }
+            } else {
+                const result = Number(opLeft.value) / Number(opRight.value);
+                return {
+                    value: result,
+                    type: DATA_TYPE.DOUBLE,
+                    line: _opLeft.line,
+                    column: _opLeft.column
+                }
+            }
+        }else{
+            throw new Error(`No se puede dividir dentro de 0 en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        }
+    }else{
+        throw new Error(`No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+    }
+}
+
+function pow(_opLeft, _opRight, _scope){
+    const opLeft = Arithmetic(_opLeft, _scope);
+    const opRight = Arithmetic(_opRight, _scope);
+
+    const typeresult = ResultType(opLeft.type, opRight.type);
+
+    if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
+        if((opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL) || (opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR)){
+            throw new Error(`No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+        } else {
+            const result = Number(opLeft.value) ** Number(opRight.value);
+            return {
+                value: result,
+                type: typeresult,
+                line: _opLeft.line,
+                column: _opLeft.column
+            }
+        }
+    }else{
+        throw new Error(`No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+    }
+}
+
+function mod(_opLeft, _opRight, _scope){
+    const opLeft = Arithmetic(_opLeft, _scope);
+    const opRight = Arithmetic(_opRight, _scope);
+
+    const typeresult = ResultType(opLeft.type, opRight.type);
+
+    if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
+        if((opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL) || (opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR)){
+            throw new Error(`No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+        } else {
+            const result = Number(opLeft.value) % Number(opRight.value);
+            return {
+                value: result,
+                type: DATA_TYPE.DOUBLE,
+                line: _opLeft.line,
+                column: _opLeft.column
+            }
+        }
+    }else{
+        throw new Error(`No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+    }
+}
+
+function una(_op, _scope){
+    const op = Arithmetic(_op, _scope);
+
+    if(op.type === DATA_TYPE.INT || op.type === DATA_TYPE.DOUBLE){
+        const result = Number(op.value) * -1;
+        return {
+            value: result,
+            type: op.type,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        throw new Error(`No se puede calcular el negativo de ${op.type} en la linea ${_op.line} y columna ${_op.column}`);
     }
 }
 
