@@ -19,34 +19,70 @@ function Relational(_exp,_scope){
         ) {
         return Arithmetic(_exp, _scope);
     }
-    else if (_exp.type === OPERATION_TYPE.EQUALS) {
-        return equals(_exp.opLeft, _exp.opRight, _scope);
+    else if (
+           _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS 
+        || _exp.type === OPERATION_TYPE.LESSEQ || _exp.type === OPERATION_TYPE.GREATER || _exp.type === OPERATION_TYPE.GREATEREQ
+        ) {
+        return compare(_exp.opLeft, _exp.opRight, _exp.type, _scope);
     }
 }
 
-function equals(_opLeft, _opRight, _scope) {
+function compare(_opLeft, _opRight, _type, _scope) {
     const opLeft = Relational(_opLeft, _scope);
     const opRight = Relational(_opRight, _scope);
-    // console.log(opLeft.type,opRight.type)
-    if (
-           (opLeft.type == DATA_TYPE.STRING && opRight.type == DATA_TYPE.STRING) || (opLeft.type == DATA_TYPE.INT && opRight.type == DATA_TYPE.INT)
+    if(
+        (opLeft.type == DATA_TYPE.STRING && opRight.type == DATA_TYPE.STRING) || (opLeft.type == DATA_TYPE.INT && opRight.type == DATA_TYPE.INT)
         || (opLeft.type == DATA_TYPE.INT && opRight.type == DATA_TYPE.DOUBLE) || (opLeft.type == DATA_TYPE.INT && opRight.type == DATA_TYPE.CHAR)
-        || (opLeft.type == DATA_TYPE.DOUBLE && opRight.type == DATA_TYPE.INT) || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.INT)
-        || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.DOUBLE) || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.CHAR) ||
-        (opLeft.type == DATA_TYPE.DOUBLE && opRight.type == DATA_TYPE.DOUBLE)) {
+        || (opLeft.type == DATA_TYPE.DOUBLE && opRight.type == DATA_TYPE.INT) || (opLeft.type == DATA_TYPE.DOUBLE && opRight.type == DATA_TYPE.CHAR)
+        || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.INT) || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.DOUBLE)
+        || (opLeft.type == DATA_TYPE.CHAR && opRight.type == DATA_TYPE.CHAR) || (opLeft.type == DATA_TYPE.DOUBLE && opRight.type == DATA_TYPE.DOUBLE)
+        ){
+
         var result = false;
-        if (opLeft.value == opRight.value) {
-            result = true;
+
+        switch(_type){
+            case OPERATION_TYPE.EQUALS:
+                if (opLeft.value == opRight.value) {
+                    result = true;
+                }
+                break;
+            case OPERATION_TYPE.DIFF:
+                if (opLeft.value != opRight.value) {
+                    result = true;
+                }
+                break;
+            case OPERATION_TYPE.LESS:
+                if (opLeft.value < opRight.value) {
+                    result = true;
+                }
+                break;
+            case OPERATION_TYPE.LESSEQ:
+                if (opLeft.value <= opRight.value) {
+                    result = true;
+                }
+                break;
+            case OPERATION_TYPE.GREATER:
+                if (opLeft.value > opRight.value) {
+                    result = true;
+                }
+                break;
+            case OPERATION_TYPE.GREATEREQ:
+                if (opLeft.value >= opRight.value) {
+                    result = true;
+                }
+                break;
         }
-        //console.log(result)
+
         return {
             value: result,
             type: DATA_TYPE.BOOL,
             line: _opLeft.line,
             column: _opLeft.column
         };
+
+    }else{
+        throw new Error(`No se puede comparar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
     }
-    
-   
 }
+
 module.exports = Relational;

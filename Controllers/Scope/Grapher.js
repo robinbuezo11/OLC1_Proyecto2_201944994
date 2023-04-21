@@ -106,7 +106,9 @@ class Grapher{
         } else if(
                        _expression.type === OPERATION_TYPE.ADD || _expression.type === OPERATION_TYPE.SUB || _expression.type === OPERATION_TYPE.MUL
                     || _expression.type === OPERATION_TYPE.DIV || _expression.type === OPERATION_TYPE.POW || _expression.type === OPERATION_TYPE.MOD
-                    || _expression.type === OPERATION_TYPE.EQUALS || _expression.type === OPERATION_TYPE.OR
+                    || _expression.type === OPERATION_TYPE.EQUALS || _expression.type === OPERATION_TYPE.DIFF || _expression.type === OPERATION_TYPE.LESS
+                    || _expression.type === OPERATION_TYPE.LESSEQ || _expression.type === OPERATION_TYPE.GREATER || _expression.type === OPERATION_TYPE.GREATEREQ 
+                    || _expression.type === OPERATION_TYPE.OR
             ){
             let value = `Node${this.id}`;
             this.graph += value + `[label=\" ${_expression.type}\n ${this.getSymbol(_expression.type)}\"];\n`;
@@ -140,6 +142,16 @@ class Grapher{
                 return "-";
             case OPERATION_TYPE.EQUALS:
                 return "==";
+            case OPERATION_TYPE.DIFF:
+                return "!=";
+            case OPERATION_TYPE.LESS:
+                return "<";
+            case OPERATION_TYPE.LESSEQ:
+                return "<=";
+            case OPERATION_TYPE.GREATER:
+                return ">";
+            case OPERATION_TYPE.GREATEREQ:
+                return ">=";
             case OPERATION_TYPE.OR:
                 return "||";
         }
@@ -164,7 +176,7 @@ class Grapher{
         this.id++;
         this.graph += varType + `[label=\"ID \n ${_instruction.id}\"];\n`;
         this.graph += _parent + "->" + varType + ";\n";
-        this.graphOperation(_instruction.value, _parent);
+        this.graphOperation(_instruction.expression, _parent);
     }
     graphMethod(_instruction, _parent){
         let varType = `Node${this.id}`;
