@@ -108,13 +108,15 @@ class Grapher{
                     || _expression.type === OPERATION_TYPE.DIV || _expression.type === OPERATION_TYPE.POW || _expression.type === OPERATION_TYPE.MOD
                     || _expression.type === OPERATION_TYPE.EQUALS || _expression.type === OPERATION_TYPE.DIFF || _expression.type === OPERATION_TYPE.LESS
                     || _expression.type === OPERATION_TYPE.LESSEQ || _expression.type === OPERATION_TYPE.GREATER || _expression.type === OPERATION_TYPE.GREATEREQ 
-                    || _expression.type === OPERATION_TYPE.OR
+                    || _expression.type === OPERATION_TYPE.OR || _expression.type === OPERATION_TYPE.AND || _expression.type === OPERATION_TYPE.NOT
             ){
             let value = `Node${this.id}`;
             this.graph += value + `[label=\" ${_expression.type}\n ${this.getSymbol(_expression.type)}\"];\n`;
             this.graph += _parent + "->" + value + ";\n";
             this.id++;
-            this.graphOperation(_expression.opLeft, value);
+            if(_expression.type !== OPERATION_TYPE.NOT){
+                this.graphOperation(_expression.opLeft, value);
+            }
             this.graphOperation(_expression.opRight, value);
         } else if(_expression.type === OPERATION_TYPE.UNARY){
             let value = `Node${this.id}`;
@@ -154,6 +156,10 @@ class Grapher{
                 return ">=";
             case OPERATION_TYPE.OR:
                 return "||";
+            case OPERATION_TYPE.AND:
+                return "&&";
+            case OPERATION_TYPE.NOT:
+                return "!";
         }
     }
     graphMain(_instruction, _parent){

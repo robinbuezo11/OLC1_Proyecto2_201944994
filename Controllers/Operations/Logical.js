@@ -18,30 +18,53 @@ function Logical(_exp, _scope) {
             ) {
         return Relational(_exp, _scope);
     }
-    else if (_exp.type === OPERATION_TYPE.OR) {
-        return or(_exp.opLeft, _exp.opRight, _scope);
+    else if (_exp.type === OPERATION_TYPE.OR || _exp.type === OPERATION_TYPE.AND || _exp.type === OPERATION_TYPE.NOT) {
+        return compare(_exp.opLeft, _exp.opRight, _exp.type, _scope);
     }
 }
-function or(_opLeft, _opRight, _scope) {
-    const opLeft = Logical(_opLeft, _scope);
-    const opRight = Logical(_opRight, _scope);
+function compare(_opLeft, _opRight, _type, _scope) {
+    if(_type === OPERATION_TYPE.NOT){
+        const opRight = Logical(_opRight, _scope);
 
-    if (opLeft.type == opRight.type && opLeft.type === DATA_TYPE.BOOL) {
-        var result = false;
-        if (opLeft.value || opRight.value) {
-            result = true;
+        if(opRight.type === DATA_TYPE.BOOL){
+            return {
+                value: !opRight.value,
+                type: DATA_TYPE.BOOL,
+                line: _opRight.line,
+                column: _opRight.column
+            };
+        }else{
+            throw new Error(`No se puede realizar una operación lógica con ${opLeft.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
         }
-        return {
-            value: result,
-            type: DATA_TYPE.BOOL,
-            line: _opLeft.line,
-            column: _opLeft.column
-        };
-    } else {
-        throw new Error(`No se puede realizar la operacion OR entre ${opLeft.type} y ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+    }else{
+        const opLeft = Logical(_opLeft, _scope);
+        const opRight = Logical(_opRight, _scope);
+
+        if (opLeft.type == opRight.type && opLeft.type === DATA_TYPE.BOOL) {
+            var result = false;
+            switch (_type) {
+                case OPERATION_TYPE.OR:
+                    if (opLeft.value || opRight.value) {
+                        result = true;
+                    }
+                    break;
+                case OPERATION_TYPE.AND:
+                    if (opLeft.value && opRight.value) {
+                        result = true;
+                    }
+                    break;
+            }
+            
+            return {
+                value: result,
+                type: DATA_TYPE.BOOL,
+                line: _opLeft.line,
+                column: _opLeft.column
+            };
+        } else {
+            throw new Error(`No se puede realizar una operación lógica con ${opLeft.type} y ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        }
     }
-    
-    
 }
 
 module.exports = Logical;

@@ -25,10 +25,10 @@
 
 "=="				return 'equals';
 "!="				return 'diff';
-"<"					return 'less';
 "<="				return 'lessEq';
-">"					return 'greater';
+"<"					return 'less';
 ">="				return 'greaterEq';
+">"					return 'greater';
 
 ":"					return 'colon';
 
@@ -113,9 +113,9 @@
 %right 'not'
 %left 'equals' 'diff' 'less' 'lessEq' 'greater' 'greaterEq'
 %left 'sum' 'sub'
-%left 'mul' 'div'
+%left 'mul' 'div' 'mod'
 %nonassoc 'pow'
-%left usub
+%right usub
 
 %start INI
 
