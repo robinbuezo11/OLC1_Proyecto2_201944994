@@ -145,10 +145,15 @@ METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTIO
         
 ;
 
-MAIN: Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
-      
-       
+MAIN
+    : Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
+    | Rmain id parLeft PARAMS parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
 ;
+
+PARAMS
+    : PARAMS comma EXPRESSION {$$ = $1; $1.push($3);}
+    | EXPRESSION {$$ = [$1];}
+
 DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
         |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
         }

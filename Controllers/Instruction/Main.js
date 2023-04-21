@@ -1,18 +1,36 @@
 const Scope = require("../Scope/Scope");
 const Instruction = require("./Instruction");
 const Block = require("./Block");
+const DecParam = require("./DecParam");
 
 function Main(_instruction, _scope) {
-    var executeMethod = _scope.getMethod(_instruction.name);
+    let executeMethod = _scope.getMethod(_instruction.name);
     
+    let string;
     if(executeMethod!=null){
-       let newScope = new Scope(_scope,"Main");
-       if(executeMethod.params_list!=null){
-
-       }else{
-            let exe = Block(executeMethod.instructions,newScope);
-            let message = exe.string;
-            return message;
+        let newScope = new Scope(_scope,"Main");
+        if(executeMethod.params!=null){
+            if(_instruction.list_values!=null && _instruction.list_values.length==executeMethod.params.length){
+                let error = false;
+                for(let i=0;i<executeMethod.params.length;i++){
+                    /*Corroborar*/var assignDeclaration = Instruction.newDeclaration(executeMethod.params[i].data_type,executeMethod.params[i].id,_instruction.list_values[i],executeMethod.params[i].line,executeMethod.params[i].column);
+                    let message = DecParam(assignDeclaration,newScope);
+                    if(message!=null){
+                        error = true;
+                        string += message+"\n";
+                    }
+                }
+                if(error){
+                    return message;
+                }
+                let exe = Block(executeMethod.instructions,newScope);
+                let message = exe.string;
+                return message;
+            }else{
+                let exe = Block(executeMethod.instructions,newScope);
+                let message = exe.string;
+                return message;
+            }
        }
     }
     return `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}`;
