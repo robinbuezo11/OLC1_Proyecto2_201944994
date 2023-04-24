@@ -80,6 +80,33 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newIfElse: function(_expression, _instructions, _elseInstructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.IF_ELSE,
+            expression: _expression,
+            instructions: _instructions,
+            elseInstructions: _elseInstructions,
+            line: _line,
+            column: _column
+        }
+    },newElseIf: function(_expression, _instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.ELSE_IF,
+            expression: _expression,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
+    },newIfElseIf: function(_expression, _instructions, _elseIfList, _elseInstructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.IF_ELSE_IF,
+            expression: _expression,
+            instructions: _instructions,
+            list_elseif: _elseIfList,
+            elseInstructions: _elseInstructions,
+            line: _line,
+            column: _column
+        }
     }
 }
 

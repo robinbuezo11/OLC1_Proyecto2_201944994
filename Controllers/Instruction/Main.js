@@ -13,7 +13,7 @@ function Main(_instruction, _scope) {
             if(_instruction.list_values!=null && _instruction.list_values.length==executeMethod.params.length){
                 let error = false;
                 for(let i=0;i<executeMethod.params.length;i++){
-                    /*Corroborar*/var assignDeclaration = Instruction.newDeclaration(executeMethod.params[i].data_type,executeMethod.params[i].id,_instruction.list_values[i],executeMethod.params[i].line,executeMethod.params[i].column);
+                    var assignDeclaration = Instruction.newDeclaration(executeMethod.params[i].id,_instruction.list_values[i],executeMethod.params[i].data_type,_instruction.line,_instruction.column);
                     let message = DecParam(assignDeclaration,newScope);
                     if(message!=null){
                         error = true;
@@ -27,10 +27,12 @@ function Main(_instruction, _scope) {
                 let message = exe.string;
                 return message;
             }else{
-                let exe = Block(executeMethod.instructions,newScope);
-                let message = exe.string;
-                return message;
+                return `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}`;
             }
+        }else{
+            let exe = Block(executeMethod.instructions,newScope);
+            let message = exe.string;
+            return message;
        }
     }
     return `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}`;

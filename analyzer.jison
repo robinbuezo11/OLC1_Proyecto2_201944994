@@ -142,17 +142,26 @@ BODY
         
 ;
 METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, null, $6, this._$.first_line,this._$.first_column+1)}
-        
+        |Rvoid id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, $4, $7, this._$.first_line,this._$.first_column+1)}
+;
+
+PARAMS
+    : PARAMS comma PARAM {$1.push($3); $$ = $1;}
+    | PARAM {$$ = [$1];}
+;
+
+PARAM: TYPE id {$$ = INSTRUCTION.newDeclaration($2, null, $1, this._$.first_line,this._$.first_column+1);}
 ;
 
 MAIN
     : Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
-    | Rmain id parLeft PARAMS parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
+    | Rmain id parLeft PARAMS_MET parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
 ;
 
-PARAMS
-    : PARAMS comma EXPRESSION {$$ = $1; $1.push($3);}
+PARAMS_MET
+    : PARAMS_MET comma EXPRESSION {$1.push($3); $$ = $1;}
     | EXPRESSION {$$ = [$1];}
+;
 
 DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
         |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
@@ -183,7 +192,18 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}
 ;
 IF: Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIf($3, $6, this._$.first_line,this._$.first_column+1)}
+    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke Relse oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIfElse($3, $6, $10, this._$.first_line,this._$.first_column+1)}
+    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke ELSEIF {$$ = INSTRUCTION.newIfElseIf($3, $6, $8, null, this._$.first_line,this._$.first_column+1)}
+    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke ELSEIF Relse oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIfElseIf($3, $6, $8, $11, this._$.first_line,this._$.first_column+1)}
 ;
+
+ELSEIF: ELSEIF EIF {$1.push($2); $$ = $1;}
+        |EIF {$$ = [$1];}
+;
+
+EIF: Relse Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = new INSTRUCTION.newElseIf($4, $7, this._$.first_line,this._$.first_column+1)}
+;
+
 EXPRESSION: EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
          | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
          | EXPRESSION mul EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}

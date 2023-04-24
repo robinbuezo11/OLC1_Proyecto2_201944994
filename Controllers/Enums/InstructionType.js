@@ -5,7 +5,9 @@ const INSTRUCTION_TYPE = {
     DEC_METHOD:     'INSTR_DEC_METHOD',
     MAIN:           'INSTR_MAIN',
     IF:             'INSTR_IF',
-    IF_ELSE:        'INSTR_ELSE'
+    IF_ELSE:        'INSTR_ELSE',
+    ELSE_IF:        'INSTR_ELSE_IF',
+    IF_ELSE_IF:     'INSTR_IF_ELSE_IF',
 };
 
 module.exports = INSTRUCTION_TYPE;
