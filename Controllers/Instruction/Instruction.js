@@ -104,6 +104,31 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newSwitch: function(_expression, _cases, _default, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.SWITCH,
+            expression: _expression,
+            cases: _cases,
+            default: _default,
+            line: _line,
+            column: _column
+        }
+    },newCase: function(_expression, _instructions, _break, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.CASE,
+            expression: _expression,
+            instructions: _instructions,
+            break: _break,
+            line: _line,
+            column: _column
+        }
+    },newDefault: function(_instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.DEFAULT,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
     },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
         return {
             type: OPERATION_TYPE.TERNARY,

@@ -5,6 +5,7 @@ const Declaration = require("./Declaration");
 const StatementIf = require("./If");
 const StatementIfElse = require("./IfElse");
 const StatementIfElseIf = require("./IfElseIf");
+const StatementSwitch = require("./Switch");
 
 function Block(_instructions,_scope){
     let string="";
@@ -37,6 +38,12 @@ function Block(_instructions,_scope){
             }
         } else if (instruction.type === INSTRUCTION_TYPE.IF_ELSE_IF) {
             let exec = StatementIfElseIf(instruction, _scope);
+            var message = exec.string;
+            if (message != null) {
+                string += message;
+            }
+        } else if (instruction.type === INSTRUCTION_TYPE.SWITCH) {
+            let exec = StatementSwitch(instruction, _scope);
             var message = exec.string;
             if (message != null) {
                 string += message;

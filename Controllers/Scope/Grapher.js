@@ -96,6 +96,12 @@ class Grapher{
                     this.graphElseIf(instruction.list_elseif[i].instructions, childName);
                 }
                 this.graphElse(instruction.elseInstructions, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.SWITCH){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"SWITCH\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphSwitch(instruction, childName);
             }
         });
     }
@@ -245,6 +251,27 @@ class Grapher{
         this.graph += childName + "[label=\"ELSE IF\"];\n";
         this.graph += _parent + "->" + childName + ";\n";
         this.traverseInstructions(childName, _instruction);
+    }
+
+    graphSwitch(_instruction, _parent){
+        let childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"CONDICION\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.expression, childName);
+        
+        for(let i=0;i < _instruction.cases.length;i++){
+            childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + `[label=\"CASE\"];\n`;
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_instruction.cases[i].expression, childName);
+            childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.traverseInstructions(childName, _instruction.cases[i].instructions);
+        }
     }
 
     getSymbol(_type){
