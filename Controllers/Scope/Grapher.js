@@ -146,6 +146,12 @@ class Grapher{
             this.graph += _parent + "->" + value + ";\n";
             this.id++;
             this.graphOperation(_expression.op, value);
+        }else if(_expression.type === OPERATION_TYPE.TERNARY){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"?\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphTernary(_expression, childName);
         }
     }
 
@@ -192,6 +198,24 @@ class Grapher{
         this.graph += instruction + `[label=\"INSTRUCCIONES\"];\n`;
         this.graph += _parent + "->" + instruction + ";\n";
         this.traverseInstructions(instruction, _instruction.instructions);
+    }
+
+    graphTernary(_instruction, _parent){
+        let childName = `Node${this.id}`;
+        this.id++;
+        this.graph += childName + `[label=\"CONDICION\"];\n`;
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.expression, childName);
+        childName = `Node${this.id}`;
+        this.id++;
+        this.graph += childName + `[label=\"TRUE\"];\n`;
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.opTrue, childName);
+        childName = `Node${this.id}`;
+        this.id++;
+        this.graph += childName + `[label=\"FALSE\"];\n`;
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.opFalse, childName);
     }
 
     graphIf(_instruction, _parent){

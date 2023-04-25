@@ -34,7 +34,12 @@ function compare(_opLeft, _opRight, _type, _scope) {
                 column: _opRight.column
             };
         }else{
-            throw new Error(`No se puede realizar una operación lógica con ${opLeft.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+            return {
+                value: `No se puede realizar una operación lógica con ${opRight.type} en la linea ${_opRight.line} y columna ${_opRight.column}`,
+                type: null,
+                line: _opRight.line,
+                column: _opRight.column
+            };
         }
     }else{
         const opLeft = Logical(_opLeft, _scope);
@@ -62,7 +67,12 @@ function compare(_opLeft, _opRight, _type, _scope) {
                 column: _opLeft.column
             };
         } else {
-            throw new Error(`No se puede realizar una operación lógica con ${opLeft.type} y ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+            return {
+                value: `No se puede realizar una operación lógica con ${opLeft.type} y ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                type: null,
+                line: _opLeft.line,
+                column: _opLeft.column
+            };
         }
     }
 }

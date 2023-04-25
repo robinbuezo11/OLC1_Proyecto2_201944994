@@ -1,4 +1,5 @@
 const INSTRUCTION_TYPE = require('../Enums/InstructionType');
+const OPERATION_TYPE = require('../Enums/OperationType');
 
 function newOperation(_opLeft, _opRight, _type, _line, _column){
     return {
@@ -34,10 +35,6 @@ const Instruction = {
             line: _line,
             column: _column
         };
-    },newBinaryOperation: function(_opLeft, _opRight, _type, _line, _column){
-        return newOperation(_opLeft, _opRight, _type, _line, _column);
-    },newUnaryOperation: function(_op, _type, _line, _column){
-        return newUnary(_op, _type, _line, _column);
     },newAssignment: function(_id, _exp, _line, _column){
         return {
             type: INSTRUCTION_TYPE.ASSIGNMENT,
@@ -107,6 +104,19 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
+        return {
+            type: OPERATION_TYPE.TERNARY,
+            expression: _expression,
+            opTrue: _opTrue,
+            opFalse: _opFalse,
+            line: _line,
+            column: _column
+        };
+    },newBinaryOperation: function(_opLeft, _opRight, _type, _line, _column){
+        return newOperation(_opLeft, _opRight, _type, _line, _column);
+    },newUnaryOperation: function(_op, _type, _line, _column){
+        return newUnary(_op, _type, _line, _column);
     }
 }
 

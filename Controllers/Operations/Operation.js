@@ -1,10 +1,10 @@
-const INSTRUCTION_TYPE = require('../Enums/InstructionType');
 const OPERATION_TYPE = require('../Enums/OperationType');
 const VALUE_TYPE = require('../Enums/ValueType');
 const Arithmetic = require('./Arithmetic');
 const Logical = require('./Logical');
 const Relational = require('./Relational');
 const ExpressionValue = require('./ExpressionValue');
+const Ternary = require('./Ternary');
 
 function Operation(_exp, _scope){
     if( 
@@ -25,6 +25,8 @@ function Operation(_exp, _scope){
         return Relational(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.AND || _exp.type === OPERATION_TYPE.OR || _exp.type === OPERATION_TYPE.NOT){
         return Logical(_exp, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        return Ternary(_exp, _scope);
     }
 }
 

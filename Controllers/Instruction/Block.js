@@ -5,6 +5,7 @@ const Declaration = require("./Declaration");
 const StatementIf = require("./If");
 const StatementIfElse = require("./IfElse");
 const StatementIfElseIf = require("./IfElseIf");
+
 function Block(_instructions,_scope){
     let string="";
     

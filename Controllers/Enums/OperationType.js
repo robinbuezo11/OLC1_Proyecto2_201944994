@@ -17,7 +17,8 @@ const OPERATION_TYPE = {
     OR:             'OR',
     NOT:            'NOT',
 
-    UNARY:          'UNARY'
+    UNARY:          'UNARY',
+    TERNARY:        'TERNARY'
 }
 
 module.exports = OPERATION_TYPE;

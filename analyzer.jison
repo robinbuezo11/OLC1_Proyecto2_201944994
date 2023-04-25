@@ -23,6 +23,11 @@
 "^"					return 'pow';
 "%"					return 'mod';
 
+"?" 				return 'tern';
+
+"++"				return 'inc';
+"--"				return 'dec';
+
 "=="				return 'equals';
 "!="				return 'diff';
 "<="				return 'lessEq';
@@ -108,6 +113,7 @@
 
 
 /* Operator associations and precedences */
+%left 'tern'
 %left 'or'
 %left 'and'
 %right 'not'
@@ -201,31 +207,34 @@ ELSEIF: ELSEIF EIF {$1.push($2); $$ = $1;}
         |EIF {$$ = [$1];}
 ;
 
-EIF: Relse Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = new INSTRUCTION.newElseIf($4, $7, this._$.first_line,this._$.first_column+1)}
+EIF: Relse Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newElseIf($4, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
-EXPRESSION: EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION mul EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION div EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION pow EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION mod EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION less EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION greater EXPRESSION    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATER,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION lessEq EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION greaterEq EXPRESSION  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION equals EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}         
-         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
-         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
-         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
-		 | sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
-         | parLeft EXPRESSION parRight      {$$=$2}
-         | double                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
-         | int                              {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
-         | Rtrue                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-         | Rfalse                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-         | string                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
-         | id                               {$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
-         | char                             {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
+
+
+EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}
+        | EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION mul EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION div EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION pow EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION mod EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION less EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION greater EXPRESSION    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATER,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION lessEq EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION greaterEq EXPRESSION  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION equals EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}         
+        | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
+        | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
+		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
+        | parLeft EXPRESSION parRight      {$$=$2}
+        | double                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
+        | int                              {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
+        | Rtrue                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+        | Rfalse                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+        | string                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
+        | id                               {$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
+        | char                             {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
 ;

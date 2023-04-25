@@ -81,7 +81,12 @@ function compare(_opLeft, _opRight, _type, _scope) {
         };
 
     }else{
-        throw new Error(`No se puede comparar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+        return {
+            value: `No se puede comparar ${opLeft.type} con ${opRight.type}. Linea: ${_opLeft.line} Columna: ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 

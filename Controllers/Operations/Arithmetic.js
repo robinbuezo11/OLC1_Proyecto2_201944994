@@ -111,7 +111,12 @@ function add(_opLeft, _opRight, _scope){
             }
         }
     }else{
-        throw new Error(`No se puede sumar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede sumar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -188,7 +193,12 @@ function sub(_opLeft, _opRight, _scope){
             }
         }
     }else{
-        throw new Error(`No se puede restar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede restar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -200,7 +210,12 @@ function mul(_opLeft, _opRight, _scope){
 
     if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
         if(opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL){
-            throw new Error(`No se puede multiplicar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+            return {
+                value: `No se puede multiplicar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                type: null,
+                line: _opLeft.line,
+                column: _opLeft.column
+            }; 
         }else if(opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR){
             if(opLeft.type === DATA_TYPE.CHAR){
                 const result = Number((opLeft.value).charCodeAt(0)) * Number(opRight.value);
@@ -229,7 +244,12 @@ function mul(_opLeft, _opRight, _scope){
             }
         }
     }else{
-        throw new Error(`No se puede multiplicar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede multiplicar ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -242,7 +262,12 @@ function div(_opLeft, _opRight, _scope){
     if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
         if(opRight.value != 0){
             if(opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL){
-                throw new Error(`No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+                return {
+                    value: `No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                    type: null,
+                    line: _opLeft.line,
+                    column: _opLeft.column
+                };
             }else if(opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR){
                 if(opLeft.type === DATA_TYPE.CHAR){
                     const result = Number((opLeft.value).charCodeAt(0)) / Number(opRight.value);
@@ -271,10 +296,20 @@ function div(_opLeft, _opRight, _scope){
                 }
             }
         }else{
-            throw new Error(`No se puede dividir dentro de 0 en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+            return {
+                value: `No se puede dividir entre 0 en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                type: null,
+                line: _opLeft.line,
+                column: _opLeft.column
+            };
         }
     }else{
-        throw new Error(`No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede dividir ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -286,7 +321,12 @@ function pow(_opLeft, _opRight, _scope){
 
     if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
         if((opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL) || (opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR)){
-            throw new Error(`No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+            return {
+                value: `No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                type: null,
+                line: _opLeft.line,
+                column: _opLeft.column
+            };
         } else {
             const result = Number(opLeft.value) ** Number(opRight.value);
             return {
@@ -297,7 +337,12 @@ function pow(_opLeft, _opRight, _scope){
             }
         }
     }else{
-        throw new Error(`No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede calcular la potencia de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -309,7 +354,12 @@ function mod(_opLeft, _opRight, _scope){
 
     if(typeresult === DATA_TYPE.DOUBLE || typeresult === DATA_TYPE.INT){
         if((opLeft.type === DATA_TYPE.BOOL || opRight.type === DATA_TYPE.BOOL) || (opLeft.type === DATA_TYPE.CHAR || opRight.type === DATA_TYPE.CHAR)){
-            throw new Error(`No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`); 
+            return {
+                value: `No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+                type: null,
+                line: _opLeft.line,
+                column: _opLeft.column
+            };
         } else {
             const result = Number(opLeft.value) % Number(opRight.value);
             return {
@@ -320,7 +370,12 @@ function mod(_opLeft, _opRight, _scope){
             }
         }
     }else{
-        throw new Error(`No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`);
+        return {
+            value: `No se puede calcular el módulo de ${opLeft.type} con ${opRight.type} en la linea ${_opLeft.line} y columna ${_opLeft.column}`,
+            type: null,
+            line: _opLeft.line,
+            column: _opLeft.column
+        };
     }
 }
 
@@ -336,7 +391,12 @@ function una(_op, _scope){
             column: _op.column
         }
     }else{
-        throw new Error(`No se puede calcular el negativo de ${op.type} en la linea ${_op.line} y columna ${_op.column}`);
+        return {
+            value: `No se puede calcular el negativo de ${op.type} en la linea ${_op.line} y columna ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        };
     }
 }
 
