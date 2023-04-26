@@ -108,6 +108,12 @@ class Grapher{
                 this.graph += childName + "[label=\"WHILE\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphWhile(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.FOR){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"FOR\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphFor(instruction, childName);
             }
         });
     }
@@ -286,6 +292,35 @@ class Grapher{
         this.graph += childName + "[label=\"CONDICION\"];\n";
         this.graph += _parent + "->" + childName + ";\n";
         this.graphOperation(_instruction.expression, childName);
+        childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.traverseInstructions(childName, _instruction.instructions);
+    }
+
+    graphFor(_instruction, _parent){
+        let childName = "Node" + this.id;
+        this.id++;
+        if(_instruction.declaration.type == INSTRUCTION_TYPE.ASSIGNMENT){
+            this.graph += childName + "[label=\"ASIGNACION\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphAssignment(_instruction.declaration, childName);
+        }else if(_instruction.declaration.type == INSTRUCTION_TYPE.DECLARATION){
+            this.graph += childName + "[label=\"DECLARACION\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphDeclaration(_instruction.declaration, childName);
+        }
+        childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"CONDICION\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.expression, childName);
+        childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"INCREMENTO\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphAssignment(_instruction.assignment, childName);
         childName = "Node" + this.id;
         this.id++;
         this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";

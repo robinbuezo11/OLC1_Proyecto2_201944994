@@ -137,6 +137,16 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newFor: function(_declaration, _expression, _assignment, _instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.FOR,
+            declaration: _declaration,
+            expression: _expression,
+            assignment: _assignment,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
     },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
         return {
             type: OPERATION_TYPE.TERNARY,

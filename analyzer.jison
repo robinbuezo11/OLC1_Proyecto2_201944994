@@ -93,7 +93,7 @@
 
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'id';
 ["\""][^\"]*["\""]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'string'; }
-["\'"][^\']*["\'"]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'char'; }
+["\'"][^\']?["\'"]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'char'; }
 [0-9]+("."[0-9]+){1}\b  return 'double';
 [0-9]+\b				return 'int';
 
@@ -193,6 +193,7 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |IF                     {$$=$1;}
         |SWITCH                 {$$=$1;}
         |WHILE                  {$$=$1;}
+        |FOR                    {$$=$1;}
 
         |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 
@@ -229,6 +230,10 @@ DEFAULT: Rdefault colon INSTRUCTIONS {$$ = INSTRUCTION.newDefault($3, this._$.fi
 ;
 
 WHILE: Rwhile parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newWhile($3, $6, this._$.first_line,this._$.first_column+1)}
+;
+
+FOR: Rfor parLeft DEC_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
+    | Rfor parLeft ASIG_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
 ;
 
 EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}

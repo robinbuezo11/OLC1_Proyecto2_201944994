@@ -7,12 +7,12 @@ function StatementWhile(_instruction, _scope){
     let operation = Operation(_instruction.expression, _scope);
 
     if(operation.type === DATA_TYPE.BOOL){
+        let parentScope = new Scope(_scope, 'While');
         while(operation.value){
-            let parentScope = new Scope(_scope, 'While');
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;
-            operation = Operation(_instruction.expression, _scope);
+            operation = Operation(_instruction.expression, parentScope);
         }
         return {
             string: message

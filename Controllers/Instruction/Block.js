@@ -7,6 +7,7 @@ const StatementIfElse = require("./IfElse");
 const StatementIfElseIf = require("./IfElseIf");
 const StatementSwitch = require("./Switch");
 const StatementWhile = require("./While");
+const StatementFor = require("./For");
 
 function Block(_instructions,_scope){
     let string="";
@@ -51,6 +52,12 @@ function Block(_instructions,_scope){
             }
         } else if (instruction.type === INSTRUCTION_TYPE.WHILE) {
             let exec = StatementWhile(instruction, _scope);
+            var message = exec.string;
+            if (message != null) {
+                string += message;
+            }
+        } else if (instruction.type === INSTRUCTION_TYPE.FOR) {
+            let exec = StatementFor(instruction, _scope);
             var message = exec.string;
             if (message != null) {
                 string += message;
