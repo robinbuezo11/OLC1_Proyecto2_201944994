@@ -11,6 +11,7 @@ const INSTRUCTION_TYPE = {
     SWITCH:         'INSTR_SWITCH',
     CASE:           'INSTR_CASE',
     DEFAULT:        'INSTR_DEFAULT',
+    WHILE:          'INSTR_WHILE',
 };
 
 module.exports = INSTRUCTION_TYPE;

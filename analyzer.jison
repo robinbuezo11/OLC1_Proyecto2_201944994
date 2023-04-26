@@ -192,6 +192,7 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |PRINT                  {$$=$1;}
         |IF                     {$$=$1;}
         |SWITCH                 {$$=$1;}
+        |WHILE                  {$$=$1;}
 
         |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 
@@ -225,6 +226,9 @@ CASE: Rcase EXPRESSION colon INSTRUCTIONS {$$ = INSTRUCTION.newCase($2, $4, fals
 ;
 
 DEFAULT: Rdefault colon INSTRUCTIONS {$$ = INSTRUCTION.newDefault($3, this._$.first_line,this._$.first_column+1)}
+;
+
+WHILE: Rwhile parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newWhile($3, $6, this._$.first_line,this._$.first_column+1)}
 ;
 
 EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}

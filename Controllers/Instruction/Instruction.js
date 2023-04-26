@@ -129,6 +129,14 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newWhile: function(_expression, _instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.WHILE,
+            expression: _expression,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
     },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
         return {
             type: OPERATION_TYPE.TERNARY,

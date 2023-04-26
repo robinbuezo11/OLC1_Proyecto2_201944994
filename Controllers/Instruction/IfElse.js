@@ -21,6 +21,10 @@ function StatementIfElse(_instruction, _scope){
         return {
             string: message,
         }
+    }else{
+        return {
+            string: `Error: La expresion de la sentencia if no es de tipo booleano. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
+        }
     }
 }
 
