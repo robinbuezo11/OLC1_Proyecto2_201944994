@@ -13,6 +13,7 @@ const INSTRUCTION_TYPE = {
     DEFAULT:        'INSTR_DEFAULT',
     WHILE:          'INSTR_WHILE',
     FOR:            'INSTR_FOR',
+    DO_WHILE:       'INSTR_DO_WHILE',
 };
 
 module.exports = INSTRUCTION_TYPE;

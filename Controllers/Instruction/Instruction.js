@@ -147,6 +147,14 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newDoWhile: function(_instructions, _expression, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.DO_WHILE,
+            instructions: _instructions,
+            expression: _expression,
+            line: _line,
+            column: _column
+        }
     },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
         return {
             type: OPERATION_TYPE.TERNARY,

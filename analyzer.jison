@@ -194,6 +194,7 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |SWITCH                 {$$=$1;}
         |WHILE                  {$$=$1;}
         |FOR                    {$$=$1;}
+        |DO_WHILE               {$$=$1;}
 
         |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 
@@ -234,6 +235,9 @@ WHILE: Rwhile parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INS
 
 FOR: Rfor parLeft DEC_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
     | Rfor parLeft ASIG_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
+;
+
+DO_WHILE: Rdo oBracke INSTRUCTIONS cBracke Rwhile parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newDoWhile($3, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
 EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}

@@ -114,6 +114,12 @@ class Grapher{
                 this.graph += childName + "[label=\"FOR\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphFor(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.DO_WHILE){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DO WHILE\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphDoWhile(instruction, childName);
             }
         });
     }
@@ -326,6 +332,19 @@ class Grapher{
         this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";
         this.graph += _parent + "->" + childName + ";\n";
         this.traverseInstructions(childName, _instruction.instructions);
+    }
+
+    graphDoWhile(_instruction, _parent){
+        let childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.traverseInstructions(childName, _instruction.instructions);
+        childName = "Node" + this.id;
+        this.id++;
+        this.graph += childName + "[label=\"CONDICION\"];\n";
+        this.graph += _parent + "->" + childName + ";\n";
+        this.graphOperation(_instruction.expression, childName);
     }
 
     getSymbol(_type){
