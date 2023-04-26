@@ -266,11 +266,11 @@ class Grapher{
             this.graph += childName + `[label=\"CASE\"];\n`;
             this.graph += _parent + "->" + childName + ";\n";
             this.graphOperation(_instruction.cases[i].expression, childName);
-            childName = "Node" + this.id;
+            let inst = "Node" + this.id;
             this.id++;
-            this.graph += childName + "[label=\"INSTRUCCIONES\"];\n";
-            this.graph += _parent + "->" + childName + ";\n";
-            this.traverseInstructions(childName, _instruction.cases[i].instructions);
+            this.graph += inst + "[label=\"INSTRUCCIONES\"];\n";
+            this.graph += childName + "->" + inst + ";\n";
+            this.traverseInstructions(inst, _instruction.cases[i].instructions);
         }
     }
 
