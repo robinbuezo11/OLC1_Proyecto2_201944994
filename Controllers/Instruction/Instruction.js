@@ -1,5 +1,6 @@
 const INSTRUCTION_TYPE = require('../Enums/InstructionType');
 const OPERATION_TYPE = require('../Enums/OperationType');
+const VALUE_TYPE = require('../Enums/ValueType');
 
 function newOperation(_opLeft, _opRight, _type, _line, _column){
     return {
@@ -29,8 +30,12 @@ const Instruction = {
             column: _column
         };
     },newValue: function(_value, _type, _line, _column){
+        let value = _value;
+        if(_type == VALUE_TYPE.STRING){
+            value = value.replace(/\\n/g, '\n').replace(/\\t/g, '\t').replace(/\\r/g, '\r').replace(/\\'/g, '\'').replace(/\\"/g, '\"').replace(/\\\\/g, '\\');
+        }
         return {
-            value: _value,
+            value: value,
             type: _type,
             line: _line,
             column: _column

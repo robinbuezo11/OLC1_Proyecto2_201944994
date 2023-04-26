@@ -205,7 +205,7 @@ class Grapher{
         }else{
             let value = `Node${this.id}`;
             this.graph += value + `[label=\" ${_instruction.type}\n ${_instruction.type === INSTRUCTION_TYPE.INC?"++":"--"}\"];\n`;
-            this.graph += varType + "->" + value + ";\n";
+            this.graph += _parent + "->" + value + ";\n";
             this.id++;
         }
     }

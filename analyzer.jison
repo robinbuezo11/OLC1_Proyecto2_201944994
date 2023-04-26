@@ -88,7 +88,8 @@
 
 
 ([a-zA-Z])[a-zA-Z0-9_]*	return 'id';
-["\""][^\"]*["\""]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'string'; }
+//["\""][^\"]*["\""]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'string'; }
+[\"]([\!]|[\#-\~]|[ \t\r\n\f]|("\\""n" | "\\""\'"))*[\"] return 'string';
 ["\'"][^\']?["\'"]		{ /* yytext = yytext.substr(1,yyleng-2); */ return 'char'; }
 [0-9]+("."[0-9]+){1}\b  return 'double';
 [0-9]+\b				return 'int';
