@@ -11,7 +11,7 @@ function StatementFor(_instruction, _scope){
             string: `Error: La sentencia for no tiene una declaracion o asignacion. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
         }
     }
-    if(_instruction.assignment.type !== INSTRUCTION_TYPE.ASSIGNMENT){
+    if(_instruction.assignment.type !== INSTRUCTION_TYPE.ASSIGNMENT && _instruction.assignment.type !== INSTRUCTION_TYPE.INC && _instruction.assignment.type !== INSTRUCTION_TYPE.DEC){
         return {
             string: `Error: La sentencia for no tiene una asignacion. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
         }

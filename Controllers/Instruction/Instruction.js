@@ -43,6 +43,20 @@ const Instruction = {
             line: _line,
             column: _column
         };
+    },newIncrement: function(_id, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.INC,
+            id: _id,
+            line: _line,
+            column: _column
+        };
+    },newDecrement: function(_id, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.DEC,
+            id: _id,
+            line: _line,
+            column: _column
+        };
     },newDeclaration: function(_id, _value, _type, _line, _column){
         return {
             type: INSTRUCTION_TYPE.DECLARATION,

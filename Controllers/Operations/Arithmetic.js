@@ -25,10 +25,10 @@ function Arithmetic(_exp, _scope){
         return mod(_exp.opLeft, _exp.opRight, _scope);
     }else if(_exp.type === OPERATION_TYPE.UNARY){
         return una(_exp.op, _scope);
-    }else if(_exp.type === OPERATION_TYPE.INC){
-        return inc(_exp.op, _scope);
-    }else if(_exp.type === OPERATION_TYPE.DEC){
-        return dec(_exp.op, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.INC){
+        return inc(_exp.id, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.DEC){
+        return dec(_exp.id, _scope);
     }
 }
 

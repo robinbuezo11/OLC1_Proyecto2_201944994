@@ -61,7 +61,7 @@ class Grapher{
                 this.graph += childName + "[label=\"DECLARACION\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphDeclaration(instruction, childName);
-            } else if(instruction.type === INSTRUCTION_TYPE.ASSIGNMENT){
+            } else if(instruction.type === INSTRUCTION_TYPE.ASSIGNMENT || instruction.type === INSTRUCTION_TYPE.INC || instruction.type === INSTRUCTION_TYPE.DEC){
                 let childName = "Node" + this.id;
                 this.id++;
                 this.graph += childName + "[label=\"ASIGNACION\"];\n";
@@ -198,9 +198,16 @@ class Grapher{
     graphAssignment(_instruction, _parent){
         let varType = `Node${this.id}`;
         this.id++;
-        this.graph += varType + `[label=\"ID \n ${_instruction.id}\"];\n`;
+        this.graph += varType + `[label=\"ID \n ${_instruction.id.value}\"];\n`;
         this.graph += _parent + "->" + varType + ";\n";
-        this.graphOperation(_instruction.expression, _parent);
+        if(_instruction.expression != null){
+            this.graphOperation(_instruction.expression, _parent);
+        }else{
+            let value = `Node${this.id}`;
+            this.graph += value + `[label=\" ${_instruction.type}\n ${_instruction.type === INSTRUCTION_TYPE.INC?"++":"--"}\"];\n`;
+            this.graph += varType + "->" + value + ";\n";
+            this.id++;
+        }
     }
 
     graphMethod(_instruction, _parent){

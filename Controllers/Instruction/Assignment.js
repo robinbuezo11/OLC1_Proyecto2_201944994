@@ -1,10 +1,21 @@
+const INSTRUCTION_TYPE = require('../Enums/InstructionType');
 const Operation = require('../Operations/Operation');
 
 function Assignment(_instruction, _scope){
-    const id = _instruction.id;
+    let id = null;
+    if(_instruction.type === INSTRUCTION_TYPE.INC || _instruction.type === INSTRUCTION_TYPE.DEC){
+        id = _instruction.id.value;
+    }else{
+        id = _instruction.id;
+    }
     const exists = _scope.existsSymbol(id);
     if(exists){
-        let value = Operation(_instruction.expression, _scope);
+        let value = null;
+        if(_instruction.type === INSTRUCTION_TYPE.INC || _instruction.type === INSTRUCTION_TYPE.DEC){
+            value = Operation(_instruction, _scope);
+        }else{
+            value = Operation(_instruction.expression, _scope);
+        }
         let symbol = _scope.getSymbol(id);
         let types = {
             symbolType: symbol.type,

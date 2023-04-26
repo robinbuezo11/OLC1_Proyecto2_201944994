@@ -22,7 +22,7 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
-        } else if (instruction.type === INSTRUCTION_TYPE.ASSIGNMENT) {
+        } else if (instruction.type === INSTRUCTION_TYPE.ASSIGNMENT || instruction.type === INSTRUCTION_TYPE.INC || instruction.type === INSTRUCTION_TYPE.DEC) {
             var message = Assignment(instruction, _scope);
             if (message != null) {
                 string += message;

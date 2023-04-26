@@ -171,7 +171,9 @@ DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,
         }
 ;
 
-ASIG_VAR: id same EXPRESSION {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}       
+ASIG_VAR: id same EXPRESSION        {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}     
+        | id inc                    {$$ = INSTRUCTION.newIncrement(INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1), this._$.first_line, this._$.first_column+1)}
+        | id dec                    {$$ = INSTRUCTION.newDecrement(INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1), this._$.first_line, this._$.first_column+1)}
 ;
 
 TYPE: Rint      {$$= DATA_TYPE.INT}
@@ -251,8 +253,6 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTer
         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION inc                   {$$= INSTRUCTION.newUnaryOperation($1, OPERATION_TYPE.INC,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION dec                   {$$= INSTRUCTION.newUnaryOperation($1, OPERATION_TYPE.DEC,this._$.first_line, this._$.first_column+1);}
         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
         | parLeft EXPRESSION parRight      {$$=$2}
