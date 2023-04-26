@@ -18,7 +18,10 @@ const OPERATION_TYPE = {
     NOT:            'NOT',
 
     UNARY:          'UNARY',
-    TERNARY:        'TERNARY'
+    TERNARY:        'TERNARY',
+
+    INC:            'INC',
+    DEC:            'DEC',
 }
 
 module.exports = OPERATION_TYPE;

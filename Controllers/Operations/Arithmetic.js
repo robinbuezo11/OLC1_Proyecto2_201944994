@@ -25,6 +25,10 @@ function Arithmetic(_exp, _scope){
         return mod(_exp.opLeft, _exp.opRight, _scope);
     }else if(_exp.type === OPERATION_TYPE.UNARY){
         return una(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.INC){
+        return inc(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.DEC){
+        return dec(_exp.op, _scope);
     }
 }
 
@@ -393,6 +397,48 @@ function una(_op, _scope){
     }else{
         return {
             value: `No se puede calcular el negativo de ${op.type} en la linea ${_op.line} y columna ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        };
+    }
+}
+
+function inc(_op, _scope){
+    const op = Arithmetic(_op, _scope);
+
+    if(op.type === DATA_TYPE.INT || op.type === DATA_TYPE.DOUBLE){
+        const result = Number(op.value) + 1;
+        return {
+            value: result,
+            type: op.type,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `No se puede calcular el incremento de ${op.type} en la linea ${_op.line} y columna ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        };
+    }
+}
+
+function dec(_op, _scope){
+    const op = Arithmetic(_op, _scope);
+
+    if(op.type === DATA_TYPE.INT || op.type === DATA_TYPE.DOUBLE){
+        const result = Number(op.value) - 1;
+        return {
+            value: result,
+            type: op.type,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `No se puede calcular el decremento de ${op.type} en la linea ${_op.line} y columna ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column

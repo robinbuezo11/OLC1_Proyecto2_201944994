@@ -15,6 +15,8 @@
 "char"				return 'Rchar';
 "string"			return 'Rstring';
 
+"++"				return 'inc';
+"--"				return 'dec';
 
 "+"					return 'sum';
 "-"					return 'sub';
@@ -24,9 +26,6 @@
 "%"					return 'mod';
 
 "?" 				return 'tern';
-
-"++"				return 'inc';
-"--"				return 'dec';
 
 "=="				return 'equals';
 "!="				return 'diff';
@@ -49,9 +48,6 @@
 "}"					return 'cBracke';
 
 "="					return 'same';
-
-"++"				return 'doubleSum';
-"--"				return 'doubleSub'
 
 ","					return 'comma';
 
@@ -121,6 +117,7 @@
 %left 'sum' 'sub'
 %left 'mul' 'div' 'mod'
 %nonassoc 'pow'
+%left 'inc' 'dec'
 %right usub
 
 %start INI
@@ -172,11 +169,11 @@ PARAMS_MET
 DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
         |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
         }
+;
 
+ASIG_VAR: id same EXPRESSION {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}       
 ;
-ASIG_VAR: id same EXPRESSION {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}
-        
-;
+
 TYPE: Rint      {$$= DATA_TYPE.INT}
     |Rdouble    {$$= DATA_TYPE.DOUBLE}
     |Rchar      {$$= DATA_TYPE.CHAR}
@@ -185,7 +182,6 @@ TYPE: Rint      {$$= DATA_TYPE.INT}
 ;
 INSTRUCTIONS: INSTRUCTIONS INSTRUCTION  {$$ = $1; $1.push($2);}
             |INSTRUCTION                {$$ = [$1];}
-
 ;
 INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT OF THE BODY
         |ASIG_VAR semiColon     {$$=$1;}
@@ -255,6 +251,8 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTer
         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION inc                   {$$= INSTRUCTION.newUnaryOperation($1, OPERATION_TYPE.INC,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION dec                   {$$= INSTRUCTION.newUnaryOperation($1, OPERATION_TYPE.DEC,this._$.first_line, this._$.first_column+1);}
         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
         | parLeft EXPRESSION parRight      {$$=$2}
