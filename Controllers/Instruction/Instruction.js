@@ -88,6 +88,24 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newFunction: function(_type, _name, _params, _instructions, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.DEC_FUNC,
+            data_type: _type,
+            name: _name,
+            params_list: _params,
+            instructions: _instructions,
+            line: _line,
+            column: _column
+        }
+    },newCall: function(_name, _values, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.CALL,
+            name: _name,
+            list_values: _values,
+            line: _line,
+            column: _column
+        }
     },newIf: function(_expression, _instructions, _line, _column){
         return {
             type: INSTRUCTION_TYPE.IF,

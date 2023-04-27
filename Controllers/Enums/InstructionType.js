@@ -16,6 +16,8 @@ const INSTRUCTION_TYPE = {
     DO_WHILE:       'INSTR_DO_WHILE',
     INC:            'INSTR_INC',
     DEC:            'INSTR_DEC',
+    DEC_FUNC:       'INSTR_DEC_FUNC',
+    CALL:           'INSTR_CALL',
 };
 
 module.exports = INSTRUCTION_TYPE;

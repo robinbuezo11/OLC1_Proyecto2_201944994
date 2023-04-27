@@ -4,6 +4,7 @@ class Scope{
         this.name = _actual;
         this.symbolsTable = new Map();
         this.methodsTable = new Map();
+        this.functionsTable = new Map();
     }
 
     addSymbol(_id, _symbol){
@@ -67,6 +68,30 @@ class Scope{
         for(let scope = this; scope != null; scope = scope.previous){
             let method = scope.methodsTable.get(_id.toLowerCase());
             if(method){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    addFunction(_id, _function){
+        this.functionsTable.set(_id.toLowerCase(), _function);
+    }
+
+    getFunction(_id){
+        for(let scope = this; scope != null; scope = scope.previous){
+            let function_ = scope.functionsTable.get(_id.toLowerCase());
+            if(function_){
+                return function_;
+            }
+        }
+        return null;
+    }
+
+    existsFunction(_id){
+        for(let scope = this; scope != null; scope = scope.previous){
+            let function_ = scope.functionsTable.get(_id.toLowerCase());
+            if(function_){
                 return true;
             }
         }

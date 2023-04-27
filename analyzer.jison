@@ -148,6 +148,8 @@ BODY
 ;
 METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, null, $6, this._$.first_line,this._$.first_column+1)}
         |Rvoid id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, $4, $7, this._$.first_line,this._$.first_column+1)}
+        |TYPE id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFunction($1, $2, null, $6, this._$.first_line,this._$.first_column+1)}
+        |TYPE id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFunction($1, $2, $4, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
 PARAMS
@@ -158,13 +160,17 @@ PARAMS
 PARAM: TYPE id {$$ = INSTRUCTION.newDeclaration($2, null, $1, this._$.first_line,this._$.first_column+1);}
 ;
 
-MAIN
-    : Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
-    | Rmain id parLeft PARAMS_MET parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
+CALL: id parLeft parRight semiColon             {$$ = INSTRUCTION.newCall($1, null, this._$.first_line,this._$.first_column+1);}
+    |id parLeft PARAMS_CALL parRight semiColon  {$$ = INSTRUCTION.newCall($1, $3, this._$.first_line,this._$.first_column+1);}
 ;
 
-PARAMS_MET
-    : PARAMS_MET comma EXPRESSION {$1.push($3); $$ = $1;}
+MAIN
+    : Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
+    | Rmain id parLeft PARAMS_CALL parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
+;
+
+PARAMS_CALL
+    : PARAMS_CALL comma EXPRESSION {$1.push($3); $$ = $1;}
     | EXPRESSION {$$ = [$1];}
 ;
 
@@ -195,6 +201,7 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |WHILE                  {$$=$1;}
         |FOR                    {$$=$1;}
         |DO_WHILE               {$$=$1;}
+        |CALL                   {$$=$1;}
 
         |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 

@@ -2,6 +2,7 @@ const INSTRUCTION_TYPE = require("../Enums/InstructionType");
 const Assignment = require("./Assignment");
 const Declaration = require("./Declaration");
 const DecMethod = require("./DecMethod");
+const DecFunction = require("./DecFunction");
 const Main = require("./Main");
 
 
@@ -36,6 +37,11 @@ function Global(_instructions, _scope){
             }
         }else if (_instructions[i].type === INSTRUCTION_TYPE.DEC_METHOD) {
             let message = DecMethod(_instructions[i], _scope);
+            if (message != null) {
+                string += message + "\n";
+            }
+        }else if (_instructions[i].type === INSTRUCTION_TYPE.DEC_FUNC) {
+            let message = DecFunction(_instructions[i], _scope);
             if (message != null) {
                 string += message + "\n";
             }
