@@ -1,7 +1,5 @@
 const Scope = require("../Scope/Scope");
 const Instruction = require("./Instruction");
-const INSTRUCTION_TYPE = require("../Enums/InstructionType");
-const Block = require("./Block");
 const DecParam = require("./DecParam");
 
 function Call(_instruction, _scope) {
@@ -13,6 +11,7 @@ function Call(_instruction, _scope) {
     let string;
     if(execute){
         let newScope = new Scope(_scope,"CALL");
+        const Block = require("./Block");
         if(execute.params!=null){
             if(_instruction.list_values!=null && _instruction.list_values.length==execute.params.length){
                 let error = false;
@@ -25,21 +24,31 @@ function Call(_instruction, _scope) {
                     }
                 }
                 if(error){
-                    return message;
+                    return {
+                        string: message
+                    }
                 }
                 let exe = Block(execute.instructions,newScope);
                 let message = exe.string;
-                return message;
+                return {
+                    string: message
+                }
             }else{
-                return `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}`;
+                return {
+                    string: `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                }
             }
         }else{
             let exe = Block(execute.instructions,newScope);
             let message = exe.string;
-            return message;
+            return {
+                string: message
+            }
        }
     }
-    return `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}`;
+    return {
+        string: `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}`
+    }
 }
 
 module.exports = Call

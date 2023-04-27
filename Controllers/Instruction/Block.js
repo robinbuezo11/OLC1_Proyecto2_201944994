@@ -9,6 +9,7 @@ const StatementSwitch = require("./Switch");
 const StatementWhile = require("./While");
 const StatementFor = require("./For");
 const StatementDoWhile = require("./DoWhile");
+const Call = require("./Call");
 
 function Block(_instructions,_scope){
     let string="";
@@ -65,6 +66,12 @@ function Block(_instructions,_scope){
             }
         } else if (instruction.type === INSTRUCTION_TYPE.DO_WHILE) {
             let exec = StatementDoWhile(instruction, _scope);
+            var message = exec.string;
+            if (message != null) {
+                string += message;
+            }
+        } else if (instruction.type === INSTRUCTION_TYPE.CALL) {
+            let exec = Call(instruction, _scope);
             var message = exec.string;
             if (message != null) {
                 string += message;
