@@ -6,6 +6,7 @@ const Logical = require('./Logical');
 const Relational = require('./Relational');
 const ExpressionValue = require('./ExpressionValue');
 const Ternary = require('./Ternary');
+const Cast = require('./Cast');
 
 function Operation(_exp, _scope){
     if( 
@@ -28,6 +29,8 @@ function Operation(_exp, _scope){
         return Logical(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
         return Ternary(_exp, _scope);
+    }else if(_exp.type === OPERATION_TYPE.CAST){
+        return Cast(_exp, _scope);
     }
 }
 

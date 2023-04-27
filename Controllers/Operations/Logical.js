@@ -17,6 +17,8 @@ function Logical(_exp, _scope) {
             || _exp.type === OPERATION_TYPE.LESSEQ || _exp.type === OPERATION_TYPE.GREATER || _exp.type === OPERATION_TYPE.GREATEREQ
             ) {
         return Relational(_exp, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        return Ternary(_exp, _scope);
     }
     else if (_exp.type === OPERATION_TYPE.OR || _exp.type === OPERATION_TYPE.AND || _exp.type === OPERATION_TYPE.NOT) {
         return compare(_exp.opLeft, _exp.opRight, _exp.type, _scope);

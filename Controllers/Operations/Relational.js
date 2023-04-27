@@ -18,6 +18,8 @@ function Relational(_exp,_scope){
         || _exp.type === OPERATION_TYPE.MUL
         ) {
         return Arithmetic(_exp, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        return Ternary(_exp, _scope);
     }
     else if (
            _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS 

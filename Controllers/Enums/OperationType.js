@@ -19,6 +19,8 @@ const OPERATION_TYPE = {
 
     UNARY:          'UNARY',
     TERNARY:        'TERNARY',
+
+    CAST:           'CAST',
 }
 
 module.exports = OPERATION_TYPE;

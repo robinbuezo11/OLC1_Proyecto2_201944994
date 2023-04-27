@@ -174,6 +174,14 @@ const Instruction = {
             line: _line,
             column: _column
         }
+    },newCast: function(_type, _exp, _line, _column){
+        return {
+            type: OPERATION_TYPE.CAST,
+            data_type: _type,
+            expression: _exp,
+            line: _line,
+            column: _column
+        }
     },newTernary: function(_expression, _opTrue, _opFalse, _line, _column){
         return {
             type: OPERATION_TYPE.TERNARY,

@@ -11,6 +11,8 @@ function Arithmetic(_exp, _scope){
         || _exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.CHAR || _exp.type === VALUE_TYPE.ID
         ){
         return ExpressionValue(_exp, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        return Ternary(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.ADD){
         return add(_exp.opLeft, _exp.opRight, _scope);
     }else if(_exp.type === OPERATION_TYPE.SUB){

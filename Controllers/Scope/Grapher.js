@@ -176,6 +176,16 @@ class Grapher{
             this.graph += childName + "[label=\"?\"];\n";
             this.graph += _parent + "->" + childName + ";\n";
             this.graphTernary(_expression, childName);
+        }else if(_expression.type === OPERATION_TYPE.CAST){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"CAST\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            let varType = `Node${this.id}`;
+            this.id++;
+            this.graph += varType + `[label=\"TIPO\n${_expression.data_type}\"];\n`;
+            this.graph += childName + "->" + varType + ";\n";
+            this.graphOperation(_expression.expression, childName);
         }
     }
 
