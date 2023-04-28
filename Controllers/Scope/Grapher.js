@@ -45,7 +45,14 @@ class Grapher{
                 this.graph += childName + "[label=\"DECLARACION METODO\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphMethod(instruction, childName);
-            } /* 
+            } /*else if(instruction.type === INSTRUCTION_TYPE.DEC_FUNC){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DECLARACION FUNCION\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphFunction(instruction, childName);
+            }*/
+            /* 
                 vectores
                 listas
                 funciones
@@ -120,6 +127,20 @@ class Grapher{
                 this.graph += childName + "[label=\"DO WHILE\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphDoWhile(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.CALL){
+                let varType = `Node${this.id}`;
+                this.id++;
+                this.graph += varType + `[label=\"LLAMADA \n ${instruction.name}\"];\n`;
+                this.graph += _parent + "->" + varType + ";\n";
+                if(instruction.list_values != null){
+                    let param = `Node${this.id}`;
+                    this.id++;
+                    this.graph += param + `[label=\"PARAMETROS\"];\n`;
+                    this.graph += varType + "->" + param + ";\n";
+                    for(let i=0;i < instruction.list_values.length;i++){
+                        this.graphOperation(instruction.list_values[i], param);
+                    }
+                }
             }
         });
     }
@@ -241,6 +262,31 @@ class Grapher{
         this.traverseInstructions(instruction, _instruction.instructions);
     }
 
+    /*graphFunction(_instruction, _parent){
+        let varType = `Node${this.id}`;
+        this.id++;
+        this.graph += varType + `[label=\"ID \n ${_instruction.name}\"];\n`;
+        this.graph += _parent + "->" + varType + ";\n";
+        let type = `Node${this.id}`;
+        this.id++;
+        this.graph += type + `[label=\"TIPO \n ${_instruction.data_type}\"];\n`;
+        this.graph += parent + "->" + type + ";\n";
+        if(_instruction.params_list != null){
+            let param = `Node${this.id}`;
+            this.id++;
+            this.graph += param + `[label=\"PARAMETROS\"];\n`;
+            this.graph += _parent + "->" + param + ";\n";
+            for(let i=0;i < _instruction.params_list.length;i++){
+                this.graphDeclaration(_instruction.params_list[i], param);
+            }
+        }
+        let instruction = `Node${this.id}`;
+        this.id++;
+        this.graph += instruction + `[label=\"INSTRUCCIONES\"];\n`;
+        this.graph += _parent + "->" + instruction + ";\n";
+        this.traverseInstructions(instruction, _instruction.instructions);
+    }*/
+
     graphTernary(_instruction, _parent){
         let childName = `Node${this.id}`;
         this.id++;
@@ -306,6 +352,14 @@ class Grapher{
             this.graph += inst + "[label=\"INSTRUCCIONES\"];\n";
             this.graph += childName + "->" + inst + ";\n";
             this.traverseInstructions(inst, _instruction.cases[i].instructions);
+        }
+
+        if(_instruction.default){
+            childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"DEFAULT\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.traverseInstructions(childName, _instruction.default.instructions);
         }
     }
 
