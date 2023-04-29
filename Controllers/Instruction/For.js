@@ -17,25 +17,27 @@ function StatementFor(_instruction, _scope){
         }
     }
 
-    let parentScope = new Scope(_scope, 'For');
+    let parent = new Scope(_scope, 'For');
 
     if(_instruction.declaration.type === INSTRUCTION_TYPE.DECLARATION){
         const Declaration = require('./Declaration');
-        Declaration(_instruction.declaration, parentScope);
+        Declaration(_instruction.declaration, parent);
     }else if(_instruction.declaration.type === INSTRUCTION_TYPE.ASSIGNMENT){
         const Assignment = require('./Assignment');
-        Assignment(_instruction.declaration, parentScope);
+        Assignment(_instruction.declaration, parent);
     }
 
-    let operation = Operation(_instruction.expression, parentScope);
+    let operation = Operation(_instruction.expression, parent);
     if(operation.type === DATA_TYPE.BOOL){
         while(operation.value){
+            let parentScope = new Scope(parent, 'For');
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;
-            if(exe.break){
+            if(exe.break || exe.return){
                 return {
-                    string: message
+                    string: message,
+                    return: exe.return,
                 }
             }
             const Assignment = require('./Assignment');

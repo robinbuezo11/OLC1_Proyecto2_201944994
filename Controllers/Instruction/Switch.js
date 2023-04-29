@@ -16,11 +16,12 @@ function StatementSwitch(_instruction, _scope){
                 const Block = require('./Block');
                 let exe = Block(_instruction.cases[i].instructions, newScope);
                 message += exe.string;
-                if(exe.break || exe.continue){
+                if(exe.break || exe.continue || exe.return){
                     return {
                         string: message,
                         break: exe.break,
                         continue: exe.continue,
+                        return: exe.return,
                     }
                 }
             }
@@ -31,11 +32,12 @@ function StatementSwitch(_instruction, _scope){
             const Block = require('./Block');
             let exe = Block(_instruction.default.instructions, newScope);
             message += exe.string;
-            if(exe.break || exe.continue){
+            if(exe.break || exe.continue || exe.return){
                 return {
                     string: message,
                     break: exe.break,
                     continue: exe.continue,
+                    return: exe.return,
                 }
             }
         }

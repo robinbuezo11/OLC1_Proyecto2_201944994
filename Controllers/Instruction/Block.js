@@ -19,7 +19,7 @@ function Block(_instructions,_scope){
     let _return=null;
     
     _instructions.forEach(instruction => {
-        if(_break || _continue!=null){
+        if(_break || _continue!=null || _return!=null){
             return;
         }else if(instruction.type===INSTRUCTION_TYPE.PRINT){
            string+=Print(instruction,_scope) + "\n";
@@ -39,9 +39,10 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
-            if (exec.break || exec.continue) {
+            if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
                 _continue = exec.continue;
+                _return = exec.return;
                 return;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.IF_ELSE) {
@@ -50,9 +51,10 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
-            if (exec.break || exec.continue) {
+            if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
                 _continue = exec.continue;
+                _return = exec.return;
                 return;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.IF_ELSE_IF) {
@@ -61,9 +63,10 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
-            if (exec.break || exec.continue) {
+            if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
                 _continue = exec.continue;
+                _return = exec.return;
                 return;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.SWITCH) {
@@ -72,11 +75,19 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
+            if (exec.return) {
+                _return = exec.return;
+                return;
+            }
         } else if (instruction.type === INSTRUCTION_TYPE.WHILE) {
             let exec = StatementWhile(instruction, _scope);
             var message = exec.string;
             if (message != null) {
                 string += message;
+            }
+            if (exec.return) {
+                _return = exec.return;
+                return;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.FOR) {
             let exec = StatementFor(instruction, _scope);
@@ -84,11 +95,19 @@ function Block(_instructions,_scope){
             if (message != null) {
                 string += message;
             }
+            if (exec.return) {
+                _return = exec.return;
+                return;
+            }
         } else if (instruction.type === INSTRUCTION_TYPE.DO_WHILE) {
             let exec = StatementDoWhile(instruction, _scope);
             var message = exec.string;
             if (message != null) {
                 string += message;
+            }
+            if (exec.return) {
+                _return = exec.return;
+                return;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.BREAK) {
             _break = true;
@@ -99,10 +118,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.RETURN){
             if(instruction.expression!=null){
                 _return = Return(instruction, _scope);
-                var message = exec.string;
-                if (message != null) {
-                    string += message;
-                }
+            }else{
+                _return = true;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.CALL) {
             let exec = Call(instruction, _scope);
@@ -115,7 +132,8 @@ function Block(_instructions,_scope){
     return {
         string:string,
         break: _break,
-        continue: _continue
+        continue: _continue,
+        return: _return
     }
 
 }

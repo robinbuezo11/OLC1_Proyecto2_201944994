@@ -4,6 +4,7 @@ const OPERATION_TYPE = require('../Enums/OperationType');
 const VALUE_TYPE = require('../Enums/ValueType');
 const ResultType = require('./ResultType');
 const ExpressionValue = require('./ExpressionValue');
+const Call = require('../Instruction/Call');
 
 function Arithmetic(_exp, _scope){
     if(
@@ -11,6 +12,8 @@ function Arithmetic(_exp, _scope){
         || _exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.CHAR || _exp.type === VALUE_TYPE.ID
         ){
         return ExpressionValue(_exp, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        return Call(_exp, _scope).return;
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
         return Ternary(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.ADD){

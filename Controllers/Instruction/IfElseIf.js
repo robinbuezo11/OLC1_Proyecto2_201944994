@@ -12,11 +12,12 @@ function StatementIfElseIf(_instruction, _scope){
             const Block = require("./Block");
             let exe = Block(_instruction.instructions, newScope);
             message += exe.string;
-            if(exe.break || exe.continue){
+            if(exe.break || exe.continue || exe.return){
                 return {
                     string: message,
                     break: exe.break,
                     continue: exe.continue,
+                    return: exe.return,
                 }
             }
             return {
@@ -30,11 +31,12 @@ function StatementIfElseIf(_instruction, _scope){
                 const Block = require("./Block");
                 let exe = Block(_instruction.list_elseif[i].instructions, newScope);
                 message += exe.string;
-                if(exe.break || exe.continue){
+                if(exe.break || exe.continue || exe.return){
                     return {
                         string: message,
                         break: exe.break,
                         continue: exe.continue,
+                        return: exe.return,
                     }
                 }
                 return {
@@ -47,11 +49,12 @@ function StatementIfElseIf(_instruction, _scope){
             const Block = require("./Block");
             let exe = Block(_instruction.elseInstructions, newScope);
             message += exe.string;
-            if(exe.break || exe.continue){
+            if(exe.break || exe.continue || exe.return){
                 return {
                     string: message,
                     break: exe.break,
                     continue: exe.continue,
+                    return: exe.return,
                 }
             }
             return {

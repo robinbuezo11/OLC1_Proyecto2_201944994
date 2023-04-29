@@ -1,7 +1,9 @@
 const INSTRUCTION_TYPE = require('../Enums/InstructionType');
 const Operation = require('../Operations/Operation');
+const Call = require('./Call');
 
 function Assignment(_instruction, _scope){
+    let message = '';
     let id = null;
     if(_instruction.type === INSTRUCTION_TYPE.INC || _instruction.type === INSTRUCTION_TYPE.DEC){
         id = _instruction.id.value;
@@ -13,6 +15,13 @@ function Assignment(_instruction, _scope){
         let value = null;
         if(_instruction.type === INSTRUCTION_TYPE.INC || _instruction.type === INSTRUCTION_TYPE.DEC){
             value = Operation(_instruction, _scope);
+        }else if(_instruction.expression.type === INSTRUCTION_TYPE.CALL){
+            let response = Call(_instruction.expression, _scope);
+            message += response.string;
+            value = response.return;
+            if(!value){
+                return message; //`No se pudo obtener el valor de la funcion ${_instruction.expression.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+            }
         }else{
             value = Operation(_instruction.expression, _scope);
         }

@@ -7,6 +7,7 @@ const Relational = require('./Relational');
 const ExpressionValue = require('./ExpressionValue');
 const Ternary = require('./Ternary');
 const Cast = require('./Cast');
+const Call = require('../Instruction/Call');
 
 function Operation(_exp, _scope){
     if( 
@@ -31,6 +32,8 @@ function Operation(_exp, _scope){
         return Ternary(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.CAST){
         return Cast(_exp, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        return Call(_exp, _scope).return;
     }
 }
 

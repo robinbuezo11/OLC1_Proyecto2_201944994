@@ -1,8 +1,11 @@
 const DATA_TYPE = require("../Enums/DataType")
 const OPERATION_TYPE = require("../Enums/OperationType")
 const VALUE_TYPE = require("../Enums/ValueType")
+const INSTRUCTION_TYPE = require("../Enums/InstructionType")
 const Relational = require("./Relational")
 const ExpressionValue = require("./ExpressionValue")
+const Ternary = require("./Ternary")
+const Call = require("../Instruction/Call")
 
 function Logical(_exp, _scope) {
     //true || false
@@ -19,6 +22,8 @@ function Logical(_exp, _scope) {
         return Relational(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
         return Ternary(_exp, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        return Call(_exp, _scope).return;
     }
     else if (_exp.type === OPERATION_TYPE.OR || _exp.type === OPERATION_TYPE.AND || _exp.type === OPERATION_TYPE.NOT) {
         return compare(_exp.opLeft, _exp.opRight, _exp.type, _scope);

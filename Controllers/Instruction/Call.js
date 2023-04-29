@@ -28,11 +28,37 @@ function Call(_instruction, _scope) {
                         string: message
                     }
                 }
+
                 let exe = Block(execute.instructions,newScope);
                 let message = exe.string;
                 if(exe.continue){
                     return {
                         string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                    }
+                }
+
+                if(execute.type){
+                    if(exe.return){
+                        if(execute.type === exe.return.type){
+                            return {
+                                string: message,
+                                return: exe.return
+                            }
+                        }else{
+                            return {
+                                string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                            }
+                        }
+                    }else{
+                        return {
+                            string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                        }
+                    }
+                } else {
+                    if(exe.return){
+                        return {
+                            string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                        }
                     }
                 }
                 return {
@@ -49,6 +75,31 @@ function Call(_instruction, _scope) {
             if(exe.continue){
                 return {
                     string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                }
+            }
+
+            if(execute.type){
+                if(exe.return){
+                    if(execute.type === exe.return.type){
+                        return {
+                            string: message,
+                            return: exe.return
+                        }
+                    }else{
+                        return {
+                            string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                        }
+                    }
+                }else{
+                    return {
+                        string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                    }
+                }
+            } else {
+                if(exe.return){
+                    return {
+                        string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                    }
                 }
             }
             return {

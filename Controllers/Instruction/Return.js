@@ -1,10 +1,7 @@
 const Operation = require('../Operations/Operation');
 
 function Return(_instruction, _scope){
-    let operation = Operation(_instruction.expression, _scope);
-    return {
-        data: operation
-    }
+    return Operation(_instruction.expression, _scope);
 }
 
 module.exports = Return;

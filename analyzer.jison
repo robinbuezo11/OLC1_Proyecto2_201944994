@@ -160,8 +160,8 @@ PARAMS
 PARAM: TYPE id {$$ = INSTRUCTION.newDeclaration($2, null, $1, this._$.first_line,this._$.first_column+1);}
 ;
 
-CALL: id parLeft parRight semiColon             {$$ = INSTRUCTION.newCall($1, null, this._$.first_line,this._$.first_column+1);}
-    |id parLeft PARAMS_CALL parRight semiColon  {$$ = INSTRUCTION.newCall($1, $3, this._$.first_line,this._$.first_column+1);}
+CALL: id parLeft parRight             {$$ = INSTRUCTION.newCall($1, null, this._$.first_line,this._$.first_column+1);}
+    |id parLeft PARAMS_CALL parRight  {$$ = INSTRUCTION.newCall($1, $3, this._$.first_line,this._$.first_column+1);}
 ;
 
 MAIN
@@ -175,11 +175,12 @@ PARAMS_CALL
 ;
 
 DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
-        |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);
-        }
+        |TYPE id same EXPRESSION    {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);}
+//        |TYPE id same CALL          {$$= INSTRUCTION.newDeclaration($2, $4, $1,this._$.first_line, this._$.first_column+1);}
 ;
 
-ASIG_VAR: id same EXPRESSION        {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}     
+ASIG_VAR: id same EXPRESSION        {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}
+//        | id same CALL              {$$ = INSTRUCTION.newAssignment($1, $3,this._$.first_line, this._$.first_column+1)}
         | id inc                    {$$ = INSTRUCTION.newIncrement(INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1), this._$.first_line, this._$.first_column+1)}
         | id dec                    {$$ = INSTRUCTION.newDecrement(INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1), this._$.first_line, this._$.first_column+1)}
 ;
@@ -201,7 +202,7 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |WHILE                  {$$=$1;}
         |FOR                    {$$=$1;}
         |DO_WHILE               {$$=$1;}
-        |CALL                   {$$=$1;}
+        |CALL semiColon         {$$=$1;}
         |Rbreak semiColon       {$$= INSTRUCTION.newBreak(this._$.first_line,this._$.first_column+1);}
         |Rcontinue semiColon    {$$= INSTRUCTION.newContinue(this._$.first_line,this._$.first_column+1);}
         |RETURN                 {$$=$1;}
@@ -268,6 +269,7 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTer
         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
+        | CALL                             {$$=$1}
         | parLeft TYPE parRight EXPRESSION %prec cast   {$$ = INSTRUCTION.newCast($2, $4, this._$.first_line,this._$.first_column+1)}
         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}

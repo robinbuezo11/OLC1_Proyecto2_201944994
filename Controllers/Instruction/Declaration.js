@@ -1,15 +1,29 @@
 const Symbol = require("../Scope/Symbol");
 const DATA_TYPE = require("../Enums/DataType");
+const INSTRUCTION_TYPE = require("../Enums/InstructionType");
 const Operation = require("../Operations/Operation");
+const Call = require("./Call");
+
 
 function Declaration(_instruction, _scope){
+    let message = '';
     if (_instruction.data_type === DATA_TYPE.DOUBLE) { 
         let value = 0.0;
         if (_instruction.value != null) {
-            let op = Operation(_instruction.value, _scope);
-            type = op.type;
+            let val = null;
+            if(_instruction.value.type === INSTRUCTION_TYPE.CALL){
+                let response = Call(_instruction.value, _scope);
+                message += response.string;
+                val = response.return;
+                if(!val){
+                    return message;//`No se pudo obtener el valor de la funcion ${_instruction.value.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
+            }else{
+                val = Operation(_instruction.value, _scope);
+            }
+            type = val.type;
             if (type === DATA_TYPE.DOUBLE) {
-                value = op.value;
+                value = val.value;
             }else{
                 return `No se puede asignar un valor de tipo ${type} a una variable de tipo ${DATA_TYPE.DOUBLE} linea: ${_instruction.line} columna: ${_instruction.column}`;
             }
@@ -25,10 +39,20 @@ function Declaration(_instruction, _scope){
     }else if (_instruction.data_type === DATA_TYPE.INT) {
         let value = 0;
         if (_instruction.value != null) { 
-            var op = Operation(_instruction.value, _scope);
-            type = op.type;
+            let val = null;
+            if(_instruction.value.type === INSTRUCTION_TYPE.CALL){
+                let response = Call(_instruction.value, _scope);
+                message += response.string;
+                val = response.return;
+                if(!val){
+                    return message;//`No se pudo obtener el valor de la funcion ${_instruction.value.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
+            }else{
+                val = Operation(_instruction.value, _scope);
+            }
+            type = val.type;
             if (type === DATA_TYPE.INT) {
-                value = op.value;
+                value = val.value;
             }else{
                 return `No se puede asignar un valor de tipo ${type} a una variable de tipo ${DATA_TYPE.INT} linea: ${_instruction.line} columna: ${_instruction.column}`;
             }
@@ -46,10 +70,20 @@ function Declaration(_instruction, _scope){
     } else if (_instruction.data_type === DATA_TYPE.CHAR) {
         let value = '';
         if (_instruction.value != null) {
-            var op = Operation(_instruction.value, _scope);
-            type = op.type;
+            let val = null;
+            if(_instruction.value.type === INSTRUCTION_TYPE.CALL){
+                let response = Call(_instruction.value, _scope);
+                message += response.string;
+                val = response.return;
+                if(!val){
+                    return message;//`No se pudo obtener el valor de la funcion ${_instruction.value.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
+            }else{
+                val = Operation(_instruction.value, _scope);
+            }
+            type = val.type;
             if (type === DATA_TYPE.CHAR) {
-                value = op.value;
+                value = val.value;
             }else{
                 return `No se puede asignar un valor de tipo ${type} a una variable de tipo ${DATA_TYPE.CHAR} linea: ${_instruction.line} columna: ${_instruction.column}`;
             }
@@ -66,12 +100,20 @@ function Declaration(_instruction, _scope){
     } else if (_instruction.data_type === DATA_TYPE.BOOL) {
         let value = true;
         if (_instruction.value != null) {
-
-            var op = Operation(_instruction.value, _scope);
-            //console.log(op)
-            type = op.type;
+            let val = null;
+            if(_instruction.value.type === INSTRUCTION_TYPE.CALL){
+                let response = Call(_instruction.value, _scope);
+                message += response.string;
+                val = response.return;
+                if(!val){
+                    return message;//`No se pudo obtener el valor de la funcion ${_instruction.value.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
+            }else{
+                val = Operation(_instruction.value, _scope);
+            }
+            type = val.type;
             if (type === DATA_TYPE.BOOL) {
-                value = op.value;
+                value = val.value;
             }else{
                 return `No se puede asignar un valor de tipo ${type} a una variable de tipo ${DATA_TYPE.BOOL} linea: ${_instruction.line} columna: ${_instruction.column}`;
             }
@@ -89,10 +131,20 @@ function Declaration(_instruction, _scope){
         let value = "";
         // console.log(_instruction)
         if (_instruction.value != null) {
-            var op = Operation(_instruction.value, _scope);
-            type = op.type;
+            let val = null;
+            if(_instruction.value.type === INSTRUCTION_TYPE.CALL){
+                let response = Call(_instruction.value, _scope);
+                message += response.string;
+                val = response.return;
+                if(!val){
+                    return message;//`No se pudo obtener el valor de la funcion ${_instruction.value.name} linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
+            }else{
+                val = Operation(_instruction.value, _scope);
+            }
+            type = val.type;
             if (type === DATA_TYPE.STRING) {
-                value = op.value;
+                value = val.value;
             }else{
                 return `No se puede asignar un valor de tipo ${type} a una variable de tipo ${DATA_TYPE.STRING} linea: ${_instruction.line} columna: ${_instruction.column}`;
             }

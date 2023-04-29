@@ -11,11 +11,12 @@ function StatementIf(_instruction, _scope){
             const Block = require('./Block');
             let exec = Block(_instruction.instructions, newScope);
             message += exec.string;
-            if(exec.break || exec.continue){
+            if(exec.break || exec.continue || exec.return){
                 return {
                     string:message,
                     break:exec.break,
-                    continue:exec.continue
+                    continue:exec.continue,
+                    return:exec.return
                 }
             }
         }

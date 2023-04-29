@@ -4,6 +4,8 @@ const OPERATION_TYPE = require("../Enums/OperationType");
 const VALUE_TYPE = require("../Enums/ValueType");
 const Arithmetic = require("./Arithmetic");
 const ExpressionValue = require("./ExpressionValue");
+const Ternary = require("./Ternary");
+const Call = require("../Instruction/Call");
 
 function Relational(_exp,_scope){
     if (
@@ -20,6 +22,8 @@ function Relational(_exp,_scope){
         return Arithmetic(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
         return Ternary(_exp, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        return Call(_exp, _scope).return;
     }
     else if (
            _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS 

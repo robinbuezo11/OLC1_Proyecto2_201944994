@@ -5,6 +5,7 @@ const DATA_TYPE = require('../Enums/DataType');
 const ExpressionValue = require('./ExpressionValue');
 const Arithmetic = require('./Arithmetic');
 const Ternary = require('./Ternary');
+const Call = require('../Instruction/Call');
 
 function Cast(_exp, _scope){
     if( 
@@ -20,6 +21,8 @@ function Cast(_exp, _scope){
         return Arithmetic(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
         return Ternary(_exp, _scope);
+    }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        return Call(_exp, _scope).return;
     }else if(_exp.type === OPERATION_TYPE.CAST){
         return cast(_exp.expression, _exp.data_type, _scope);      
     }
