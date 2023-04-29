@@ -45,13 +45,13 @@ class Grapher{
                 this.graph += childName + "[label=\"DECLARACION METODO\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphMethod(instruction, childName);
-            } /*else if(instruction.type === INSTRUCTION_TYPE.DEC_FUNC){
+            } else if(instruction.type === INSTRUCTION_TYPE.DEC_FUNC){
                 let childName = "Node" + this.id;
                 this.id++;
                 this.graph += childName + "[label=\"DECLARACION FUNCION\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphFunction(instruction, childName);
-            }*/
+            }
             /* 
                 vectores
                 listas
@@ -128,19 +128,7 @@ class Grapher{
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphDoWhile(instruction, childName);
             } else if(instruction.type === INSTRUCTION_TYPE.CALL){
-                let varType = `Node${this.id}`;
-                this.id++;
-                this.graph += varType + `[label=\"LLAMADA \n ${instruction.name}\"];\n`;
-                this.graph += _parent + "->" + varType + ";\n";
-                if(instruction.list_values != null){
-                    let param = `Node${this.id}`;
-                    this.id++;
-                    this.graph += param + `[label=\"PARAMETROS\"];\n`;
-                    this.graph += varType + "->" + param + ";\n";
-                    for(let i=0;i < instruction.list_values.length;i++){
-                        this.graphOperation(instruction.list_values[i], param);
-                    }
-                }
+                this.graphCall(instruction, _parent);
             } else if(instruction.type === INSTRUCTION_TYPE.BREAK){
                 let childName = "Node" + this.id;
                 this.id++;
@@ -151,6 +139,14 @@ class Grapher{
                 this.id++;
                 this.graph += childName + "[label=\"CONTINUE\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
+            } else if(instruction.type === INSTRUCTION_TYPE.RETURN){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"RETURN\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                if(instruction.expression != null){
+                    this.graphOperation(instruction.expression, childName);
+                }
             }
         });
     }
@@ -164,7 +160,9 @@ class Grapher{
         this.id++;
         this.graph += varName + `[label=\"ID\n${_instruction.id}\"];\n`;
         this.graph += _parent + "->" + varName + ";\n";
-        if(_instruction.value != null){
+        if(_instruction.type === INSTRUCTION_TYPE.CALL){
+            this.graphCall(_instruction, _parent);
+        } else if(_instruction.value != null){
             this.graphOperation(_instruction.value, _parent);
         }
     }
@@ -217,6 +215,8 @@ class Grapher{
             this.graph += varType + `[label=\"TIPO\n${_expression.data_type}\"];\n`;
             this.graph += childName + "->" + varType + ";\n";
             this.graphOperation(_expression.expression, childName);
+        }else if(_expression.type === INSTRUCTION_TYPE.CALL){
+            this.graphCall(_expression, _parent);
         }
     }
 
@@ -229,7 +229,23 @@ class Grapher{
             let param = `Node${this.id}`;
             this.id++;
             this.graph += param + `[label=\"PARAMETROS\"];\n`;
-            this.graph += _parent + "->" + param + ";\n";
+            this.graph += varType + "->" + param + ";\n";
+            for(let i=0;i < _instruction.list_values.length;i++){
+                this.graphOperation(_instruction.list_values[i], param);
+            }
+        }
+    }
+
+    graphCall(_instruction, _parent){
+        let varType = `Node${this.id}`;
+        this.id++;
+        this.graph += varType + `[label=\"LLAMADA \n ${_instruction.name}\"];\n`;
+        this.graph += _parent + "->" + varType + ";\n";
+        if(_instruction.list_values != null){
+            let param = `Node${this.id}`;
+            this.id++;
+            this.graph += param + `[label=\"PARAMETROS\"];\n`;
+            this.graph += varType + "->" + param + ";\n";
             for(let i=0;i < _instruction.list_values.length;i++){
                 this.graphOperation(_instruction.list_values[i], param);
             }
@@ -241,7 +257,9 @@ class Grapher{
         this.id++;
         this.graph += varType + `[label=\"ID \n ${_instruction.id.value}\"];\n`;
         this.graph += _parent + "->" + varType + ";\n";
-        if(_instruction.expression != null){
+        if(_instruction.type === INSTRUCTION_TYPE.CALL){
+            this.graphCall(_instruction, _parent);
+        }else if(_instruction.expression != null){
             this.graphOperation(_instruction.expression, _parent);
         }else{
             let value = `Node${this.id}`;
@@ -272,15 +290,15 @@ class Grapher{
         this.traverseInstructions(instruction, _instruction.instructions);
     }
 
-    /*graphFunction(_instruction, _parent){
+    graphFunction(_instruction, _parent){
+        let type = `Node${this.id}`;
+        this.id++;
+        this.graph += type + `[label=\"TIPO \n ${_instruction.data_type}\"];\n`;
+        this.graph += _parent + "->" + type + ";\n";
         let varType = `Node${this.id}`;
         this.id++;
         this.graph += varType + `[label=\"ID \n ${_instruction.name}\"];\n`;
         this.graph += _parent + "->" + varType + ";\n";
-        let type = `Node${this.id}`;
-        this.id++;
-        this.graph += type + `[label=\"TIPO \n ${_instruction.data_type}\"];\n`;
-        this.graph += parent + "->" + type + ";\n";
         if(_instruction.params_list != null){
             let param = `Node${this.id}`;
             this.id++;
@@ -295,7 +313,7 @@ class Grapher{
         this.graph += instruction + `[label=\"INSTRUCCIONES\"];\n`;
         this.graph += _parent + "->" + instruction + ";\n";
         this.traverseInstructions(instruction, _instruction.instructions);
-    }*/
+    }
 
     graphTernary(_instruction, _parent){
         let childName = `Node${this.id}`;
