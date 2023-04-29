@@ -150,12 +150,11 @@ const Instruction = {
             line: _line,
             column: _column
         }
-    },newCase: function(_expression, _instructions, _break, _line, _column){
+    },newCase: function(_expression, _instructions, _line, _column){
         return {
             type: INSTRUCTION_TYPE.CASE,
             expression: _expression,
             instructions: _instructions,
-            break: _break,
             line: _line,
             column: _column
         }
@@ -189,6 +188,25 @@ const Instruction = {
             type: INSTRUCTION_TYPE.DO_WHILE,
             instructions: _instructions,
             expression: _expression,
+            line: _line,
+            column: _column
+        }
+    },newBreak: function(_line, _column){
+        return {
+            type: INSTRUCTION_TYPE.BREAK,
+            line: _line,
+            column: _column
+        }
+    },newContinue: function(_line, _column){
+        return {
+            type: INSTRUCTION_TYPE.CONTINUE,
+            line: _line,
+            column: _column
+        }
+    },newReturn: function(_exp, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.RETURN,
+            expression: _exp,
             line: _line,
             column: _column
         }

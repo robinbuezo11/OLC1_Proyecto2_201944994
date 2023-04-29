@@ -33,6 +33,11 @@ function StatementFor(_instruction, _scope){
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;
+            if(exe.break){
+                return {
+                    string: message
+                }
+            }
             const Assignment = require('./Assignment');
             Assignment(_instruction.assignment, parentScope);
             operation = Operation(_instruction.expression, parentScope);

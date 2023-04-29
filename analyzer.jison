@@ -202,6 +202,9 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |FOR                    {$$=$1;}
         |DO_WHILE               {$$=$1;}
         |CALL                   {$$=$1;}
+        |Rbreak semiColon       {$$= INSTRUCTION.newBreak(this._$.first_line,this._$.first_column+1);}
+        |Rcontinue semiColon    {$$= INSTRUCTION.newContinue(this._$.first_line,this._$.first_column+1);}
+        |RETURN                 {$$=$1;}
 
         |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 
@@ -230,8 +233,7 @@ CASES: CASES CASE {$1.push($2); $$ = $1;}
     |CASE {$$ = [$1];}
 ;
 
-CASE: Rcase EXPRESSION colon INSTRUCTIONS {$$ = INSTRUCTION.newCase($2, $4, false, this._$.first_line,this._$.first_column+1)}
-    | Rcase EXPRESSION colon INSTRUCTIONS Rbreak semiColon {$$ = INSTRUCTION.newCase($2, $4, true, this._$.first_line,this._$.first_column+1)}
+CASE: Rcase EXPRESSION colon INSTRUCTIONS {$$ = INSTRUCTION.newCase($2, $4, this._$.first_line,this._$.first_column+1)}
 ;
 
 DEFAULT: Rdefault colon INSTRUCTIONS {$$ = INSTRUCTION.newDefault($3, this._$.first_line,this._$.first_column+1)}
@@ -245,6 +247,10 @@ FOR: Rfor parLeft DEC_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBrac
 ;
 
 DO_WHILE: Rdo oBracke INSTRUCTIONS cBracke Rwhile parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newDoWhile($3, $7, this._$.first_line,this._$.first_column+1)}
+;
+
+RETURN: Rreturn EXPRESSION semiColon {$$ = INSTRUCTION.newReturn($2, this._$.first_line,this._$.first_column+1)}
+        |Rreturn semiColon {$$ = INSTRUCTION.newReturn(null, this._$.first_line,this._$.first_column+1)}
 ;
 
 EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}

@@ -12,6 +12,11 @@ function StatementDoWhile(_instruction, _scope){
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;
+            if(exe.break){
+                return {
+                    string: message
+                }
+            }
             operation = Operation(_instruction.expression, parentScope);
         }while(operation.value);
         return {

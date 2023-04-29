@@ -141,6 +141,16 @@ class Grapher{
                         this.graphOperation(instruction.list_values[i], param);
                     }
                 }
+            } else if(instruction.type === INSTRUCTION_TYPE.BREAK){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"BREAK\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+            } else if(instruction.type === INSTRUCTION_TYPE.CONTINUE){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"CONTINUE\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
             }
         });
     }

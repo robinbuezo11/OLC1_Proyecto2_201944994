@@ -30,6 +30,11 @@ function Call(_instruction, _scope) {
                 }
                 let exe = Block(execute.instructions,newScope);
                 let message = exe.string;
+                if(exe.continue){
+                    return {
+                        string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                    }
+                }
                 return {
                     string: message
                 }
@@ -41,6 +46,11 @@ function Call(_instruction, _scope) {
         }else{
             let exe = Block(execute.instructions,newScope);
             let message = exe.string;
+            if(exe.continue){
+                return {
+                    string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                }
+            }
             return {
                 string: message
             }

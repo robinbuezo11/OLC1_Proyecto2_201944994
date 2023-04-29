@@ -25,6 +25,9 @@ function Main(_instruction, _scope) {
                 }
                 let exe = Block(executeMethod.instructions,newScope);
                 let message = exe.string;
+                if(exe.continue){
+                    return `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`;
+                }
                 return message;
             }else{
                 return `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}`;
@@ -32,6 +35,9 @@ function Main(_instruction, _scope) {
         }else{
             let exe = Block(executeMethod.instructions,newScope);
             let message = exe.string;
+            if(exe.continue){
+                return `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`;
+            }
             return message;
        }
     }

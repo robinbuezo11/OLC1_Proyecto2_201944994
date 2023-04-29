@@ -18,6 +18,9 @@ const INSTRUCTION_TYPE = {
     DEC:            'INSTR_DEC',
     DEC_FUNC:       'INSTR_DEC_FUNC',
     CALL:           'INSTR_CALL',
+    BREAK:          'INSTR_BREAK',
+    CONTINUE:       'INSTR_CONTINUE',
+    RETURN:         'INSTR_RETURN',
 };
 
 module.exports = INSTRUCTION_TYPE;

@@ -12,11 +12,25 @@ function StatementIfElse(_instruction, _scope){
             const Block = require("./Block");
             let exe = Block(_instruction.instructions, newScope);
             message += exe.string;
+            if(exe.break || exe.continue){
+                return {
+                    string: message,
+                    break: exe.break,
+                    continue: exe.continue,
+                }
+            }
         }else{
             let newScope = new Scope(_scope, "Else");
             const Block = require("./Block");
             let exe = Block(_instruction.elseInstructions, newScope);
             message += exe.string;
+            if(exe.break || exe.continue){
+                return {
+                    string: message,
+                    break: exe.break,
+                    continue: exe.continue,
+                }
+            }
         }
         return {
             string: message,
