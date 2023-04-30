@@ -227,6 +227,42 @@ const Instruction = {
             line: _line,
             column: _column
         };
+    },newVectorNull: function(_type, _id, _create_type, _size, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.VECTOR_NULL,
+            data_type: _type,
+            id: _id,
+            create_type: _create_type,
+            size: _size,
+            line: _line,
+            column: _column
+        };
+    },newVectorValues: function(_type, _id, _list_values, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.VECTOR_VALUES,
+            data_type: _type,
+            id: _id,
+            list_values: _list_values,
+            line: _line,
+            column: _column
+        };
+    },newVectorAccess: function(_id, _index, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.VECTOR_ACCESS,
+            id: _id,
+            index: _index,
+            line: _line,
+            column: _column
+        };
+    },newSetVector: function(_id, _index, _value, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.SET_VECTOR,
+            id: _id,
+            index: _index,
+            value: _value,
+            line: _line,
+            column: _column
+        };
     },newBinaryOperation: function(_opLeft, _opRight, _type, _line, _column){
         return newOperation(_opLeft, _opRight, _type, _line, _column);
     },newUnaryOperation: function(_op, _type, _line, _column){

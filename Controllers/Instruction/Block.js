@@ -10,6 +10,7 @@ const StatementWhile = require("./While");
 const StatementFor = require("./For");
 const StatementDoWhile = require("./DoWhile");
 const Call = require("./Call");
+const Vector = require("./Vector");
 const Return = require("./Return");
 
 function Block(_instructions,_scope){
@@ -126,6 +127,13 @@ function Block(_instructions,_scope){
             var message = exec.string;
             if (message != null) {
                 string += message;
+            }
+        } else if (
+                    _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
+                    || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR){
+            let message = Vector(_instructions[i], _scope);
+            if (message != null) {
+                string += message + "\n";
             }
         }
     });

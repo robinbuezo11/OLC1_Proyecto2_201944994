@@ -51,10 +51,10 @@
 
 ","					return 'comma';
 
-"[" 				return 'oSquare';
-"]"					return 'cSquare';
 "[[" 				return 'oDouSquare';
 "]]"				return 'cDouSquare';
+"[" 				return 'oSquare';
+"]"					return 'cSquare';
 
 "if"				return 'Rif';
 "else"				return 'Relse';
@@ -143,9 +143,11 @@ BODY
     |ASIG_VAR semiColon     {$$=$1;}
     |METHODS                {$$=$1;}
     |MAIN                   {$$=$1;} 
-
-        
+    |DEC_STRUCT             {$$=$1;}
+    |SET_STRUCT             {$$=$1;}
 ;
+
+
 METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, null, $6, this._$.first_line,this._$.first_column+1)}
         |Rvoid id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, $4, $7, this._$.first_line,this._$.first_column+1)}
         |TYPE id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFunction($1, $2, null, $6, this._$.first_line,this._$.first_column+1)}
@@ -196,6 +198,8 @@ INSTRUCTIONS: INSTRUCTIONS INSTRUCTION  {$$ = $1; $1.push($2);}
 ;
 INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                           //RECURSIVE DECLARATION OF EACH COMPONENT OF THE BODY
         |ASIG_VAR semiColon     {$$=$1;}
+        |DEC_STRUCT             {$$=$1;}
+        |SET_STRUCT             {$$=$1;}
         |PRINT                  {$$=$1;}
         |IF                     {$$=$1;}
         |SWITCH                 {$$=$1;}
@@ -254,6 +258,17 @@ RETURN: Rreturn EXPRESSION semiColon {$$ = INSTRUCTION.newReturn($2, this._$.fir
         |Rreturn semiColon {$$ = INSTRUCTION.newReturn(null, this._$.first_line,this._$.first_column+1)}
 ;
 
+DEC_STRUCT: TYPE oSquare cSquare id same Rnew TYPE oSquare EXPRESSION cSquare semiColon {$$ = INSTRUCTION.newVectorNull($1, $4, $7, $9, this._$.first_line,this._$.first_column+1)}
+            |TYPE oSquare cSquare id same oBracke LIST_VALUES cBracke semiColon {$$ = INSTRUCTION.newVectorValues($1, $4, $7, this._$.first_line,this._$.first_column+1)}
+;
+
+LIST_VALUES: LIST_VALUES comma EXPRESSION {$1.push($3); $$ = $1;}
+            |EXPRESSION {$$ = [$1];}
+;
+
+SET_STRUCT: id oSquare EXPRESSION cSquare same EXPRESSION semiColon {$$ = INSTRUCTION.newSetVector($1, $3, $6, this._$.first_line,this._$.first_column+1)}
+;
+
 EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}
         | EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
@@ -269,11 +284,12 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTer
         | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
         | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
-        | CALL                             {$$=$1}
         | parLeft TYPE parRight EXPRESSION %prec cast   {$$ = INSTRUCTION.newCast($2, $4, this._$.first_line,this._$.first_column+1)}
         | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
         | parLeft EXPRESSION parRight      {$$=$2}
+        | CALL                             {$$=$1}
+        | id oSquare EXPRESSION cSquare    {$$= INSTRUCTION.newVectorAccess($1,$3,this._$.first_line, this._$.first_column+1);}
         | double                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
         | int                              {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
         | Rtrue                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}

@@ -68,7 +68,7 @@ function Declaration(_instruction, _scope){
         //console.log(_scope)
         return null;
     } else if (_instruction.data_type === DATA_TYPE.CHAR) {
-        let value = '';
+        let value = '0';
         if (_instruction.value != null) {
             let val = null;
             if(_instruction.value.type === INSTRUCTION_TYPE.CALL){

@@ -3,6 +3,7 @@ const Assignment = require("./Assignment");
 const Declaration = require("./Declaration");
 const DecMethod = require("./DecMethod");
 const DecFunction = require("./DecFunction");
+const Vector = require("./Vector");
 const Main = require("./Main");
 
 
@@ -42,6 +43,14 @@ function Global(_instructions, _scope){
             }
         }else if (_instructions[i].type === INSTRUCTION_TYPE.DEC_FUNC) {
             let message = DecFunction(_instructions[i], _scope);
+            if (message != null) {
+                string += message + "\n";
+            }
+        }else if (
+                    _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
+                    || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR
+            ){
+            let message = Vector(_instructions[i], _scope);
             if (message != null) {
                 string += message + "\n";
             }
