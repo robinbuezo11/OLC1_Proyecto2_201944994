@@ -77,7 +77,7 @@ function getValue(_type){
         case DATA_TYPE.DOUBLE:
             return 0.0;
         case DATA_TYPE.CHAR:
-            return '0';
+            return '\u0000';
         case DATA_TYPE.STRING:
             return "";
         case DATA_TYPE.BOOL:

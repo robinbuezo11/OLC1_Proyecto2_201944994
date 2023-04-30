@@ -51,12 +51,19 @@ class Grapher{
                 this.graph += childName + "[label=\"DECLARACION FUNCION\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphFunction(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.VECTOR_NULL || instruction.type === INSTRUCTION_TYPE.VECTOR_VALUES){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DECLARACION VECTOR\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphVectorDeclaration(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.SET_VECTOR){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphVectorAssignment(instruction, childName);
             }
-            /* 
-                vectores
-                listas
-                funciones
-            */
         });
     }
 
@@ -147,6 +154,18 @@ class Grapher{
                 if(instruction.expression != null){
                     this.graphOperation(instruction.expression, childName);
                 }
+            } else if(instruction.type === INSTRUCTION_TYPE.VECTOR_NULL || instruction.type === INSTRUCTION_TYPE.VECTOR_VALUES){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DECLARACION VECTOR\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphVectorDeclaration(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.SET_VECTOR){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphVectorAssignment(instruction, childName);
             }
         });
     }
@@ -217,6 +236,20 @@ class Grapher{
             this.graphOperation(_expression.expression, childName);
         }else if(_expression.type === INSTRUCTION_TYPE.CALL){
             this.graphCall(_expression, _parent);
+        }else if(_expression.type === INSTRUCTION_TYPE.VECTOR_ACCESS){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"ACCESO VECTOR\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            let varName = `Node${this.id}`;
+            this.id++;
+            this.graph += varName + `[label=\"ID\n${_expression.id}\"];\n`;
+            this.graph += childName + "->" + varName + ";\n";
+            let index = `Node${this.id}`;
+            this.id++;
+            this.graph += index + `[label=\"POSICION\"];\n`;
+            this.graph += childName + "->" + index + ";\n";
+            this.graphOperation(_expression.index, index);
         }
     }
 
@@ -313,6 +346,51 @@ class Grapher{
         this.graph += instruction + `[label=\"INSTRUCCIONES\"];\n`;
         this.graph += _parent + "->" + instruction + ";\n";
         this.traverseInstructions(instruction, _instruction.instructions);
+    }
+
+    graphVectorDeclaration(_instruction, _parent){
+        let varType = `Node${this.id}`;
+        this.id++;
+        this.graph += varType + `[label=\"TIPO \n ${_instruction.data_type}\"];\n`;
+        this.graph += _parent + "->" + varType + ";\n";
+        let id = `Node${this.id}`;
+        this.id++;
+        this.graph += id + `[label=\"ID \n ${_instruction.id}\"];\n`;
+        this.graph += _parent + "->" + id + ";\n";
+        if(_instruction.type === INSTRUCTION_TYPE.VECTOR_NULL){
+            let size = `Node${this.id}`;
+            this.id++;
+            this.graph += size + `[label=\"TAMAÑO\"];\n`;
+            this.graph += _parent + "->" + size + ";\n";
+            this.graphOperation(_instruction.size, size);
+        }else if(_instruction.type === INSTRUCTION_TYPE.VECTOR_VALUES){
+            let value = `Node${this.id}`;
+                this.id++;
+                this.graph += value + `[label=\"VALORES\"];\n`;
+                this.graph += _parent + "->" + value + ";\n";
+            for(let i=0;i < _instruction.list_values.length;i++){
+                this.graphOperation(_instruction.list_values[i], value);
+            }
+        }
+    }
+
+    graphVectorAssignment(_instruction, _parent){
+        let id = `Node${this.id}`;
+        this.id++;
+        this.graph += id + `[label=\"ID \n ${_instruction.id}\"];\n`;
+        this.graph += _parent + "->" + id + ";\n";
+        let index = `Node${this.id}`;
+        this.id++;
+        this.graph += index + `[label=\"POSICION\"];\n`;
+        this.graph += _parent + "->" + index + ";\n";
+        this.graphOperation(_instruction.index, index);
+        if(_instruction.value){
+            let value = `Node${this.id}`;
+            this.id++;
+            this.graph += value + `[label=\"VALOR\"];\n`;
+            this.graph += _parent + "->" + value + ";\n";
+            this.graphOperation(_instruction.value, value);
+        }
     }
 
     graphTernary(_instruction, _parent){
