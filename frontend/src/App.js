@@ -1,12 +1,17 @@
 import './App.css';
 import  { useState } from 'react';
 import MonacoEditor from 'react-monaco-editor';
-import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 import axios from 'axios';
+
 function App() {
   const [code, setCode] = useState('');
   const [resultado, setResultado] = useState('');
+
   function analizar(){
     axios.post('http://localhost:5000/analyzer', {
       input: code
@@ -19,44 +24,55 @@ function App() {
       console.log(error);
     });
   }
+
   function graphAST(){
     axios.get('http://localhost:5000/graphAST');
   }
+
   return (
     <div className="App">
       <header className="App-header">
-      <div className='editores' >
-        <div className='containerE'>
-          <div className="editor1">
-            <MonacoEditor
-              width="700"
-              height="600"
-              language="javascript"
-              theme="vs-dark"
-              value={code}
-              options={{ minimap: { enabled: false } }}
-              onChange={setCode}
-            />
-          </div>
-          <div className="editor2">
-            <MonacoEditor
-              width="700"
-              height="600"
-              language="javascript"
-              theme="vs-dark"
-              value={resultado}
-              options={{ readOnly: true }}
-            />
-          </div>
-        </div>
-          <div>
-            <Button variant="primary" className="boton" onClick={()=>{analizar()} }>Analizar</Button>
-          </div>
-          <div>
-            <Button variant="primary" className="boton" onClick={()=>{graphAST()}}>Generar AST</Button>
-          </div>
-        </div>
+      <Navbar bg="secondary" variant='dark' id='nav'>
+      <Container id='nav'>
+        <Nav className="me-auto">
+          <NavDropdown className='navitm' title="Archivo" id="basic-nav-dropdown">
+            <NavDropdown.Item >Crear</NavDropdown.Item>
+            <NavDropdown.Item >Abrir</NavDropdown.Item>
+            <NavDropdown.Item >Guardar</NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown className='navitm' title="Reportes" id="basic-nav-dropdown">
+            <NavDropdown.Item  onClick={()=>{graphAST()}}>Árbol AST</NavDropdown.Item>
+            <NavDropdown.Item >Tabla de Símbolos</NavDropdown.Item>
+            <NavDropdown.Item >Tabla de Errores</NavDropdown.Item>
+          </NavDropdown>
+          <Nav.Link className='navitm' onClick={()=>{analizar()} }>Ejecutar</Nav.Link>
+        </Nav>
+      </Container>
+      </Navbar>
       </header>
+      <body className='Content'>
+        <div className='editores' >
+          <div className='containerE'>
+            <div className="editor1">
+              <MonacoEditor
+                language="javascript"
+                theme="vs-dark"
+                value={code}
+                options={{ minimap: { enabled: false } }}
+                onChange={setCode}
+              />
+            </div>
+            <div className="editor2">
+              <MonacoEditor
+                language="javascript"
+                theme="vs-dark"
+                value={resultado}
+                options={{ readOnly: true, minimap: { enabled: false } }}
+              />
+            </div>
+          </div>
+        </div>
+      </body>
     </div>
   );
 }
