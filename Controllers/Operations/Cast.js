@@ -20,6 +20,7 @@ function Cast(_exp, _scope){
         return Arithmetic(_exp, _scope);
     }else if(
                _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER || _exp.type === OPERATION_TYPE.LENGTH
+            || _exp.type === OPERATION_TYPE.TRUNCATE
         ){
         const Native = require('./Native');
         return Native(_exp, _scope);

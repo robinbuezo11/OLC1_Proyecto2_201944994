@@ -25,6 +25,7 @@ const OPERATION_TYPE = {
     TO_LOWER:       'TO_LOWER',
     TO_UPPER:       'TO_UPPER',
     LENGTH:         'LENGTH',
+    TRUNCATE:       'TRUNCATE',
 }
 
 module.exports = OPERATION_TYPE;

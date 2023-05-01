@@ -52,21 +52,15 @@ function Native(_exp, _scope){
         return toUpper(_exp.op, _scope);
     }else if(_exp.type === OPERATION_TYPE.LENGTH){
         return length(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TRUNCATE){
+        return truncate(_exp.op, _scope);
     }
 }
 
 function toLower(_op, _scope){
     const op = Native(_op, _scope);
 
-    if(op.type === DATA_TYPE.STRING){
-        if(Array.isArray(op.value)){
-            return {
-                value: `Error: La función toLower no puede ser aplicada a un arreglo. Linea: ${_op.line} Columna: ${_op.column}`,
-                type: null,
-                line: _op.line,
-                column: _op.column
-            }
-        }
+    if(op.type === DATA_TYPE.STRING && !Array.isArray(op.value)){
         let result = op.value.toLowerCase();
         return {
             value: result,
@@ -87,15 +81,7 @@ function toLower(_op, _scope){
 function toUpper(_op, _scope){
     const op = Native(_op, _scope);
 
-    if(op.type === DATA_TYPE.STRING){
-        if(Array.isArray(op.value)){
-            return {
-                value: `Error: La función toLower no puede ser aplicada a un arreglo. Linea: ${_op.line} Columna: ${_op.column}`,
-                type: null,
-                line: _op.line,
-                column: _op.column
-            }
-        }
+    if(op.type === DATA_TYPE.STRING && !Array.isArray(op.value)){
         let result = op.value.toUpperCase();
         return {
             value: result,
@@ -127,6 +113,27 @@ function length(_op, _scope){
     }else{
         return {
             value: `Error: La función length espera un parámetro de tipo String, Vector o Lista. Linea: ${_op.line} Columna: ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        }
+    }
+}
+
+function truncate(_op, _scope){
+    const op = Native(_op, _scope);
+
+    if((op.type === DATA_TYPE.DOUBLE || op.type === DATA_TYPE.INT) && !Array.isArray(op.value)){
+        let result = Math.trunc(op.value);
+        return {
+            value: result,
+            type: DATA_TYPE.INT,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `Error: La función truncate espera un parámetro de tipo Double o Int. Linea: ${_op.line} Columna: ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column

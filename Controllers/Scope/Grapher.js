@@ -326,6 +326,12 @@ class Grapher{
             this.graph += childName + "[label=\"LENGTH\"];\n";
             this.graph += _parent + "->" + childName + ";\n";
             this.graphOperation(_expression.op, childName);
+        }else if(_expression.type === OPERATION_TYPE.TRUNCATE){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"TRUNCATE\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_expression.op, childName);
         }
     }
 
