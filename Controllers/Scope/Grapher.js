@@ -344,6 +344,12 @@ class Grapher{
             this.graph += childName + "[label=\"TYPEOF\"];\n";
             this.graph += _parent + "->" + childName + ";\n";
             this.graphOperation(_expression.op, childName);
+        }else if(_expression.type === OPERATION_TYPE.TO_STRING){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"TOSTRING\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_expression.op, childName);
         }
     }
 

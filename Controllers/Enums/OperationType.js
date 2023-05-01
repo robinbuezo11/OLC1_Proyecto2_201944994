@@ -28,6 +28,7 @@ const OPERATION_TYPE = {
     TRUNCATE:       'TRUNCATE',
     ROUND:          'ROUND',
     TYPEOF:         'TYPEOF',
+    TO_STRING:      'TO_STRING',
 }
 
 module.exports = OPERATION_TYPE;

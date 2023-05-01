@@ -58,6 +58,8 @@ function Native(_exp, _scope){
         return round(_exp.op, _scope);
     }else if(_exp.type === OPERATION_TYPE.TYPEOF){
         return typeof_(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TO_STRING){
+        return toString(_exp.op, _scope);
     }
 }
 
@@ -180,6 +182,27 @@ function typeof_(_op, _scope){
     }else{
         return {
             value: `Error: La función typeof espera un parámetro de cualquier tipo válido. Linea: ${_op.line} Columna: ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        }
+    }
+}
+
+function toString(_op, _scope){
+    const op = Native(_op, _scope);
+
+    if((op.type === DATA_TYPE.DOUBLE || op.type === DATA_TYPE.INT || op.type === DATA_TYPE.BOOL) && !Array.isArray(op.value)){
+        let result = op.value.toString();
+        return {
+            value: result,
+            type: DATA_TYPE.STRING,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `Error: La función toString espera un parámetro de tipo numérico o booleano. Linea: ${_op.line} Columna: ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column
