@@ -26,6 +26,7 @@ const OPERATION_TYPE = {
     TO_UPPER:       'TO_UPPER',
     LENGTH:         'LENGTH',
     TRUNCATE:       'TRUNCATE',
+    ROUND:          'ROUND',
 }
 
 module.exports = OPERATION_TYPE;

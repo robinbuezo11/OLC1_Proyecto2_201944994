@@ -54,6 +54,8 @@ function Native(_exp, _scope){
         return length(_exp.op, _scope);
     }else if(_exp.type === OPERATION_TYPE.TRUNCATE){
         return truncate(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.ROUND){
+        return round(_exp.op, _scope);
     }
 }
 
@@ -133,7 +135,28 @@ function truncate(_op, _scope){
         }
     }else{
         return {
-            value: `Error: La función truncate espera un parámetro de tipo Double o Int. Linea: ${_op.line} Columna: ${_op.column}`,
+            value: `Error: La función truncate espera un parámetro de tipo numérico. Linea: ${_op.line} Columna: ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        }
+    }
+}
+
+function round(_op, _scope){
+    const op = Native(_op, _scope);
+
+    if((op.type === DATA_TYPE.DOUBLE || op.type === DATA_TYPE.INT) && !Array.isArray(op.value)){
+        let result = Math.round(op.value);
+        return {
+            value: result,
+            type: DATA_TYPE.INT,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `Error: La función round espera un parámetro de tipo numérico. Linea: ${_op.line} Columna: ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column
