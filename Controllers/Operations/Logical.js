@@ -2,10 +2,6 @@ const DATA_TYPE = require("../Enums/DataType")
 const OPERATION_TYPE = require("../Enums/OperationType")
 const VALUE_TYPE = require("../Enums/ValueType")
 const INSTRUCTION_TYPE = require("../Enums/InstructionType")
-const Relational = require("./Relational")
-const ExpressionValue = require("./ExpressionValue")
-const Ternary = require("./Ternary")
-const Call = require("../Instruction/Call")
 
 function Logical(_exp, _scope) {
     //true || false
@@ -14,16 +10,24 @@ function Logical(_exp, _scope) {
         ||_exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.ID || _exp.type === VALUE_TYPE.CHAR
         || _exp.type === INSTRUCTION_TYPE.VECTOR_ACCESS || _exp.type === INSTRUCTION_TYPE.LIST_ACCESS
         ) {
+        const ExpressionValue = require("./ExpressionValue")
         return ExpressionValue(_exp, _scope);
-    }
-    else if (
+    }else if (
                _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS 
             || _exp.type === OPERATION_TYPE.LESSEQ || _exp.type === OPERATION_TYPE.GREATER || _exp.type === OPERATION_TYPE.GREATEREQ
-            ) {
+        ) {
+        const Relational = require("./Relational")
         return Relational(_exp, _scope);
+    }else if(
+               _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER
+        ){
+        const Native = require("./Native")
+        return Native(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        const Ternary = require("./Ternary")
         return Ternary(_exp, _scope);
     }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        const Call = require("../Instruction/Call")
         return Call(_exp, _scope).return;
     }
     else if (_exp.type === OPERATION_TYPE.OR || _exp.type === OPERATION_TYPE.AND || _exp.type === OPERATION_TYPE.NOT) {

@@ -3,8 +3,6 @@ const INSTRUCTION_TYPE = require('../Enums/InstructionType');
 const OPERATION_TYPE = require('../Enums/OperationType');
 const VALUE_TYPE = require('../Enums/ValueType');
 const ResultType = require('./ResultType');
-const ExpressionValue = require('./ExpressionValue');
-const Call = require('../Instruction/Call');
 
 function Arithmetic(_exp, _scope){
     if(
@@ -12,10 +10,18 @@ function Arithmetic(_exp, _scope){
         || _exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.CHAR || _exp.type === VALUE_TYPE.ID
         || _exp.type === INSTRUCTION_TYPE.VECTOR_ACCESS || _exp.type === INSTRUCTION_TYPE.LIST_ACCESS
         ){
+        const ExpressionValue = require('./ExpressionValue');
         return ExpressionValue(_exp, _scope);
+    }else if(
+        _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER
+    ){
+        const Native = require('./Native');
+        return Native(_exp, _scope);
     }else if(_exp.type === INSTRUCTION_TYPE.CALL){
+        const Call = require('../Instruction/Call');
         return Call(_exp, _scope).return;
     }else if(_exp.type === OPERATION_TYPE.TERNARY){
+        const Ternary = require('./Ternary');
         return Ternary(_exp, _scope);
     }else if(_exp.type === OPERATION_TYPE.ADD){
         return add(_exp.opLeft, _exp.opRight, _scope);

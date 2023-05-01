@@ -21,6 +21,9 @@ const OPERATION_TYPE = {
     TERNARY:        'TERNARY',
 
     CAST:           'CAST',
+
+    TO_LOWER:       'TO_LOWER',
+    TO_UPPER:       'TO_UPPER',
 }
 
 module.exports = OPERATION_TYPE;

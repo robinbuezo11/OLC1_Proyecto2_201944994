@@ -308,6 +308,18 @@ class Grapher{
             this.graph += index + `[label=\"POSICION\"];\n`;
             this.graph += childName + "->" + index + ";\n";
             this.graphOperation(_expression.index, index);
+        }else if(_expression.type === OPERATION_TYPE.TO_LOWER){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"TO LOWER\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_expression.op, childName);
+        }else if(_expression.type === OPERATION_TYPE.TO_UPPER){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"TO UPPER\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_expression.op, childName);
         }
     }
 
