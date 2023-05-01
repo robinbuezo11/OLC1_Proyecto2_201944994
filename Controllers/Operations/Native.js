@@ -60,6 +60,8 @@ function Native(_exp, _scope){
         return typeof_(_exp.op, _scope);
     }else if(_exp.type === OPERATION_TYPE.TO_STRING){
         return toString(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.TO_CHAR_ARRAY){
+        return toCharArray(_exp.op, _scope);
     }
 }
 
@@ -203,6 +205,27 @@ function toString(_op, _scope){
     }else{
         return {
             value: `Error: La función toString espera un parámetro de tipo numérico o booleano. Linea: ${_op.line} Columna: ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        }
+    }
+}
+
+function toCharArray(_op, _scope){
+    const op = Native(_op, _scope);
+
+    if(op.type === DATA_TYPE.STRING && !Array.isArray(op.value)){
+        let result = op.value.split('');
+        return {
+            value: result,
+            type: DATA_TYPE.CHAR,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `Error: La función toCharArray espera un parámetro de tipo String. Linea: ${_op.line} Columna: ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column

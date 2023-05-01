@@ -138,8 +138,8 @@ function Block(_instructions,_scope){
                 string += message + "\n";
             }
         } else if (
-                    instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.ADD_LIST
-                    || instruction.type === INSTRUCTION_TYPE.SET_LIST
+                       instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.LIST_VALUES
+                    || instruction.type === INSTRUCTION_TYPE.ADD_LIST || instruction.type === INSTRUCTION_TYPE.SET_LIST
             ) {
             let message = List(instruction, _scope);
             if (message != null) {

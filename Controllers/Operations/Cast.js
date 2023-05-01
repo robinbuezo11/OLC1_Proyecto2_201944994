@@ -21,7 +21,7 @@ function Cast(_exp, _scope){
     }else if(
                _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER || _exp.type === OPERATION_TYPE.LENGTH
             || _exp.type === OPERATION_TYPE.TRUNCATE || _exp.type === OPERATION_TYPE.ROUND || _exp.type === OPERATION_TYPE.TYPEOF
-            || _exp.type === OPERATION_TYPE.TO_STRING
+            || _exp.type === OPERATION_TYPE.TO_STRING || _exp.type === OPERATION_TYPE.TO_CHAR_ARRAY
         ){
         const Native = require('./Native');
         return Native(_exp, _scope);
@@ -75,14 +75,14 @@ function cast(_exp, _type, _scope){
     }else if(_type === DATA_TYPE.DOUBLE){
         if(exp.type === DATA_TYPE.INT){
             return {
-                value: exp.value,
+                value: exp.value * 1.0,
                 type: DATA_TYPE.DOUBLE,
                 line: _exp.line,
                 column: _exp.column
             };
         }else if(exp.type === DATA_TYPE.CHAR){
             return {
-                value: exp.value.charCodeAt(0),
+                value: exp.value.charCodeAt(0) * 1.0,
                 type: DATA_TYPE.DOUBLE,
                 line: _exp.line,
                 column: _exp.column

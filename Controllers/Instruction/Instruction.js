@@ -272,6 +272,15 @@ const Instruction = {
             line: _line,
             column: _column
         };
+    },newListValues: function(_type, _id, _list_values, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.LIST_VALUES,
+            data_type: _type,
+            id: _id,
+            list_values: _list_values,
+            line: _line,
+            column: _column
+        };
     },newAddList: function(_id, _value, _line, _column){
         return {
             type: INSTRUCTION_TYPE.ADD_LIST,

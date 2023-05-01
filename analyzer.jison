@@ -264,6 +264,7 @@ RETURN: Rreturn EXPRESSION semiColon    {$$ = INSTRUCTION.newReturn($2, this._$.
 DEC_STRUCT: TYPE oSquare cSquare id same Rnew TYPE oSquare EXPRESSION cSquare semiColon {$$ = INSTRUCTION.newVectorNull($1, $4, $7, $9, this._$.first_line,this._$.first_column+1)}
             |TYPE oSquare cSquare id same oBracke LIST_VALUES cBracke semiColon         {$$ = INSTRUCTION.newVectorValues($1, $4, $7, this._$.first_line,this._$.first_column+1)}
             |Rlist less TYPE greater id same Rnew Rlist less TYPE greater semiColon     {$$ = INSTRUCTION.newList($3, $5, $10, this._$.first_line,this._$.first_column+1)}
+            |Rlist less TYPE greater id same EXPRESSION semiColon                       {$$ = INSTRUCTION.newListValues($3, $5, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
 LIST_VALUES: LIST_VALUES comma EXPRESSION   {$1.push($3); $$ = $1;}
@@ -298,6 +299,7 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$= INSTRUCTION.newTern
         | Rround parLeft EXPRESSION parRight            {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.ROUND,this._$.first_line, this._$.first_column+1);}
         | Rtypeof parLeft EXPRESSION parRight           {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.TYPEOF,this._$.first_line, this._$.first_column+1);}
         | RtoString parLeft EXPRESSION parRight         {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.TO_STRING,this._$.first_line, this._$.first_column+1);}
+        | RtoCharArray parLeft EXPRESSION parRight      {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.TO_CHAR_ARRAY,this._$.first_line, this._$.first_column+1);}
         | not EXPRESSION                                {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION                    %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
         | parLeft EXPRESSION parRight                   {$$=$2}

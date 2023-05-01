@@ -17,6 +17,23 @@ function List(_instruction, _scope){
         _scope.addSymbol(newSymbol.id, newSymbol);
         // console.log(_scope)
         return null;
+    }else if(_instruction.type === INSTRUCTION_TYPE.LIST_VALUES){
+        let list_values = Operation(_instruction.list_values, _scope);
+        if(Array.isArray(list_values.value)){
+            if(_instruction.data_type === list_values.type){
+                const newSymbol = new Symbol(_instruction.id, list_values.value, _instruction.data_type, _instruction.line, _instruction.column);
+
+                if (_scope.existsSymbolInActualScope(newSymbol.id) != false) {
+                    return "Error: ya existe un simbolo con el nombre " + newSymbol.id + " linea: " + newSymbol.line + " columna: " + newSymbol.column;
+                }
+                _scope.addSymbol(newSymbol.id, newSymbol);
+                return null;
+            }else{
+                return `Error: No se puede asignar un valor de tipo ${list_values.type} a una lista de tipo ${_instruction.data_type} Linea ${_instruction.line} Columna ${_instruction.column}`;
+            }
+        }else{
+            return `Error: El valor asignado no es una lista Linea ${_instruction.line} Columna ${_instruction.column}`;
+        }
     }else if(_instruction.type === INSTRUCTION_TYPE.ADD_LIST){
         let message = '';
         const exists = _scope.existsSymbol(_instruction.id);

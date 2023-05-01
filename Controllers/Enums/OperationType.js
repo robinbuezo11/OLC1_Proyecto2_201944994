@@ -29,6 +29,7 @@ const OPERATION_TYPE = {
     ROUND:          'ROUND',
     TYPEOF:         'TYPEOF',
     TO_STRING:      'TO_STRING',
+    TO_CHAR_ARRAY:  'TO_CHAR_ARRAY',
 }
 
 module.exports = OPERATION_TYPE;

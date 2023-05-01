@@ -48,7 +48,7 @@ function Global(_instructions, _scope){
                 string += message + "\n";
             }
         }else if (
-                    _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
+                       _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
                     || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR
             ){
             let message = Vector(_instructions[i], _scope);
@@ -56,8 +56,8 @@ function Global(_instructions, _scope){
                 string += message + "\n";
             }
         }else if (
-                    _instructions[i].type === INSTRUCTION_TYPE.DEC_LIST || _instructions[i].type === INSTRUCTION_TYPE.ADD_LIST
-                    || _instructions[i].type === INSTRUCTION_TYPE.SET_LIST
+                       _instructions[i].type === INSTRUCTION_TYPE.DEC_LIST || _instructions[i].type === INSTRUCTION_TYPE.LIST_VALUES
+                    || _instructions[i].type === INSTRUCTION_TYPE.ADD_LIST || _instructions[i].type === INSTRUCTION_TYPE.SET_LIST
             ){
             let message = List(_instructions[i], _scope);
             if (message != null) {

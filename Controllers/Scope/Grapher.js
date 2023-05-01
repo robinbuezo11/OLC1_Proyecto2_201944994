@@ -63,7 +63,7 @@ class Grapher{
                 this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphStructAssignment(instruction, childName);
-            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST){
+            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.LIST_VALUES){
                 let childName = "Node" + this.id;
                 this.id++;
                 this.graph += childName + "[label=\"DECLARACION LISTA\"];\n";
@@ -188,7 +188,7 @@ class Grapher{
                 this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
                 this.graphStructAssignment(instruction, childName);
-            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST){
+            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.LIST_VALUES){
                 let childName = "Node" + this.id;
                 this.id++;
                 this.graph += childName + "[label=\"DECLARACION LISTA\"];\n";
@@ -350,6 +350,12 @@ class Grapher{
             this.graph += childName + "[label=\"TOSTRING\"];\n";
             this.graph += _parent + "->" + childName + ";\n";
             this.graphOperation(_expression.op, childName);
+        }else if(_expression.type === OPERATION_TYPE.TO_CHAR_ARRAY){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"TOCHARARRAY\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            this.graphOperation(_expression.op, childName);
         }
     }
 
@@ -502,6 +508,13 @@ class Grapher{
         this.id++;
         this.graph += id + `[label=\"ID \n ${_instruction.id}\"];\n`;
         this.graph += _parent + "->" + id + ";\n";
+        if(_instruction.type === INSTRUCTION_TYPE.LIST_VALUES){
+            let value = `Node${this.id}`;
+            this.id++;
+            this.graph += value + `[label=\"VALORES\"];\n`;
+            this.graph += _parent + "->" + value + ";\n";
+            this.graphOperation(_instruction.list_values, value);
+        }
     }
 
     graphTernary(_instruction, _parent){
