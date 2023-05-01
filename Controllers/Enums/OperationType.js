@@ -27,6 +27,7 @@ const OPERATION_TYPE = {
     LENGTH:         'LENGTH',
     TRUNCATE:       'TRUNCATE',
     ROUND:          'ROUND',
+    TYPEOF:         'TYPEOF',
 }
 
 module.exports = OPERATION_TYPE;

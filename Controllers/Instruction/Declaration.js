@@ -20,6 +20,9 @@ function Declaration(_instruction, _scope){
                 }
             }else{
                 val = Operation(_instruction.value, _scope);
+                if(!val.type){
+                    return val.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
             }
             type = val.type;
             if (type === DATA_TYPE.DOUBLE) {
@@ -49,6 +52,9 @@ function Declaration(_instruction, _scope){
                 }
             }else{
                 val = Operation(_instruction.value, _scope);
+                if(!val.type){
+                    return val.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
             }
             type = val.type;
             if (type === DATA_TYPE.INT) {
@@ -80,6 +86,9 @@ function Declaration(_instruction, _scope){
                 }
             }else{
                 val = Operation(_instruction.value, _scope);
+                if(!val.type){
+                    return val.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
             }
             type = val.type;
             if (type === DATA_TYPE.CHAR) {
@@ -110,6 +119,9 @@ function Declaration(_instruction, _scope){
                 }
             }else{
                 val = Operation(_instruction.value, _scope);
+                if(!val.type){
+                    return val.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
             }
             type = val.type;
             if (type === DATA_TYPE.BOOL) {
@@ -141,6 +153,9 @@ function Declaration(_instruction, _scope){
                 }
             }else{
                 val = Operation(_instruction.value, _scope);
+                if(!val.type){
+                    return val.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                }
             }
             type = val.type;
             if (type === DATA_TYPE.STRING) {

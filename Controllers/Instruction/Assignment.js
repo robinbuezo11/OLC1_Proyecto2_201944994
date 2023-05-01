@@ -24,6 +24,9 @@ function Assignment(_instruction, _scope){
             }
         }else{
             value = Operation(_instruction.expression, _scope);
+            if(!value.type){
+                return value.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+            }
         }
         let symbol = _scope.getSymbol(id);
         let types = {
