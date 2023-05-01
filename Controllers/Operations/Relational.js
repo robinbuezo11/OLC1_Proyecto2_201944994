@@ -20,7 +20,7 @@ function Relational(_exp,_scope){
         const Arithmetic = require("./Arithmetic");
         return Arithmetic(_exp, _scope);
     }else if(
-           _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER
+           _exp.type === OPERATION_TYPE.TO_LOWER || _exp.type === OPERATION_TYPE.TO_UPPER || _exp.type === OPERATION_TYPE.LENGTH
         ){
         const Native = require("./Native");
         return Native(_exp, _scope);
@@ -29,7 +29,17 @@ function Relational(_exp,_scope){
         return Ternary(_exp, _scope);
     }else if(_exp.type === INSTRUCTION_TYPE.CALL){
         const Call = require("../Instruction/Call");
-        return Call(_exp, _scope).return;
+        let call = Call(_exp, _scope);
+        if(call.return){
+            return call.return;
+        }else{
+            return {
+                value: call.string,
+                type: null,
+                line: _exp.line,
+                column: _exp.column
+            };
+        }
     }
     else if (
            _exp.type === OPERATION_TYPE.EQUALS || _exp.type === OPERATION_TYPE.DIFF || _exp.type === OPERATION_TYPE.LESS 

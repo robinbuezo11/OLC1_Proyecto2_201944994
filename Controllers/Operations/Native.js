@@ -35,11 +35,23 @@ function Native(_exp, _scope){
         return Cast(_exp, _scope);
     }else if(_exp.type === INSTRUCTION_TYPE.CALL){
         const Call = require('../Instruction/Call');
-        return Call(_exp, _scope).return;
+        let call = Call(_exp, _scope);
+        if(call.return){
+            return call.return;
+        }else{
+            return {
+                value: call.string,
+                type: null,
+                line: _exp.line,
+                column: _exp.column
+            };
+        }
     }else if(_exp.type === OPERATION_TYPE.TO_LOWER){
         return toLower(_exp.op, _scope);
     }else if(_exp.type === OPERATION_TYPE.TO_UPPER){
         return toUpper(_exp.op, _scope);
+    }else if(_exp.type === OPERATION_TYPE.LENGTH){
+        return length(_exp.op, _scope);
     }
 }
 
@@ -47,6 +59,14 @@ function toLower(_op, _scope){
     const op = Native(_op, _scope);
 
     if(op.type === DATA_TYPE.STRING){
+        if(Array.isArray(op.value)){
+            return {
+                value: `Error: La función toLower no puede ser aplicada a un arreglo. Linea: ${_op.line} Columna: ${_op.column}`,
+                type: null,
+                line: _op.line,
+                column: _op.column
+            }
+        }
         let result = op.value.toLowerCase();
         return {
             value: result,
@@ -68,6 +88,14 @@ function toUpper(_op, _scope){
     const op = Native(_op, _scope);
 
     if(op.type === DATA_TYPE.STRING){
+        if(Array.isArray(op.value)){
+            return {
+                value: `Error: La función toLower no puede ser aplicada a un arreglo. Linea: ${_op.line} Columna: ${_op.column}`,
+                type: null,
+                line: _op.line,
+                column: _op.column
+            }
+        }
         let result = op.value.toUpperCase();
         return {
             value: result,
@@ -78,6 +106,27 @@ function toUpper(_op, _scope){
     }else{
         return {
             value: `Error: La función toUpper espera un parámetro de tipo String. Linea: ${_op.line} Columna: ${_op.column}`,
+            type: null,
+            line: _op.line,
+            column: _op.column
+        }
+    }
+}
+
+function length(_op, _scope){
+    const op = Native(_op, _scope);
+
+    if(op.type === DATA_TYPE.STRING || Array.isArray(op.value)){
+        let result = op.value.length;
+        return {
+            value: result,
+            type: DATA_TYPE.INT,
+            line: _op.line,
+            column: _op.column
+        }
+    }else{
+        return {
+            value: `Error: La función length espera un parámetro de tipo String, Vector o Lista. Linea: ${_op.line} Columna: ${_op.column}`,
             type: null,
             line: _op.line,
             column: _op.column

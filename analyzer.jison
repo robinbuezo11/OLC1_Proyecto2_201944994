@@ -292,6 +292,7 @@ EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$= INSTRUCTION.newTern
         | EXPRESSION or EXPRESSION                      {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
         | RtoLower parLeft EXPRESSION parRight          {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.TO_LOWER,this._$.first_line, this._$.first_column+1);}
         | RtoUpper parLeft EXPRESSION parRight          {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.TO_UPPER,this._$.first_line, this._$.first_column+1);}
+        | Rlength parLeft EXPRESSION parRight           {$$= INSTRUCTION.newUnaryOperation($3, OPERATION_TYPE.LENGTH,this._$.first_line, this._$.first_column+1);}
         | parLeft TYPE parRight EXPRESSION %prec cast   {$$= INSTRUCTION.newCast($2, $4, this._$.first_line,this._$.first_column+1)}
         | not EXPRESSION                                {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
 		| sub EXPRESSION       %prec usub               {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
