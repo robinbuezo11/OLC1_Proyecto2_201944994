@@ -1,6 +1,5 @@
 const Symbol = require("../Scope/Symbol");
 const DATA_TYPE = require("../Enums/DataType");
-const OPERATION_TYPE = require("../Enums/OperationType");
 
 function DecParam(_instruction, _scope){
     if(_instruction.data_type === DATA_TYPE.DOUBLE){
@@ -16,7 +15,7 @@ function DecParam(_instruction, _scope){
         }
         const newSymbol = new Symbol(_instruction.id, value, DATA_TYPE.DOUBLE, _instruction.line, _instruction.column);
         if(_scope.existsSymbolInActualScope(newSymbol.id)){
-            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}`;
+            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}\n`;
         }else{
             _scope.addSymbol(newSymbol.id, newSymbol);
             return null;
@@ -34,7 +33,7 @@ function DecParam(_instruction, _scope){
         }
         const newSymbol = new Symbol(_instruction.id, value, DATA_TYPE.INT, _instruction.line, _instruction.column);
         if(_scope.existsSymbolInActualScope(newSymbol.id)){
-            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}`;
+            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}\n`;
         }else{
             _scope.addSymbol(newSymbol.id, newSymbol);
             return null;
@@ -52,7 +51,7 @@ function DecParam(_instruction, _scope){
         }
         const newSymbol = new Symbol(_instruction.id, value, DATA_TYPE.CHAR, _instruction.line, _instruction.column);
         if(_scope.existsSymbolInActualScope(newSymbol.id)){
-            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}`;
+            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}\n`;
         }else{
             _scope.addSymbol(newSymbol.id, newSymbol);
             return null;
@@ -70,7 +69,7 @@ function DecParam(_instruction, _scope){
         }
         const newSymbol = new Symbol(_instruction.id, value, DATA_TYPE.BOOL, _instruction.line, _instruction.column);
         if(_scope.existsSymbolInActualScope(newSymbol.id)){
-            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}`;
+            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}\n`;
         }else{
             _scope.addSymbol(newSymbol.id, newSymbol);
             return null;
@@ -88,7 +87,7 @@ function DecParam(_instruction, _scope){
         }
         const newSymbol = new Symbol(_instruction.id, value, DATA_TYPE.STRING, _instruction.line, _instruction.column);
         if(_scope.existsSymbolInActualScope(newSymbol.id)){
-            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}`;
+            return `Error la variable ${newSymbol.id} ya existe en la Linea: ${newSymbol.line} Columna: ${newSymbol.column}\n`;
         }else{
             _scope.addSymbol(newSymbol.id, newSymbol);
             return null;

@@ -27,19 +27,19 @@ function Block(_instructions,_scope){
            string+=Print(instruction,_scope) + "\n";
         }else if (instruction.type === INSTRUCTION_TYPE.DECLARATION) {
             var message = Declaration(instruction, _scope);
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.ASSIGNMENT || instruction.type === INSTRUCTION_TYPE.INC || instruction.type === INSTRUCTION_TYPE.DEC) {
             var message = Assignment(instruction, _scope);
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
         } else if (instruction.type === INSTRUCTION_TYPE.IF) {
             let exec = StatementIf(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
@@ -50,8 +50,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.IF_ELSE) {
             let exec = StatementIfElse(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
@@ -62,8 +62,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.IF_ELSE_IF) {
             let exec = StatementIfElseIf(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.break || exec.continue || exec.return) {
                 _break = exec.break;
@@ -74,8 +74,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.SWITCH) {
             let exec = StatementSwitch(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.return) {
                 _return = exec.return;
@@ -84,8 +84,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.WHILE) {
             let exec = StatementWhile(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.return) {
                 _return = exec.return;
@@ -94,8 +94,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.FOR) {
             let exec = StatementFor(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.return) {
                 _return = exec.return;
@@ -104,8 +104,8 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.DO_WHILE) {
             let exec = StatementDoWhile(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
             if (exec.return) {
                 _return = exec.return;
@@ -126,24 +126,24 @@ function Block(_instructions,_scope){
         } else if (instruction.type === INSTRUCTION_TYPE.CALL) {
             let exec = Call(instruction, _scope);
             var message = exec.string;
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
         } else if (
                     instruction.type === INSTRUCTION_TYPE.VECTOR_NULL || instruction.type === INSTRUCTION_TYPE.VECTOR_VALUES
                     || instruction.type === INSTRUCTION_TYPE.SET_VECTOR
             ){
             let message = Vector(instruction, _scope);
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
         } else if (
                        instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.LIST_VALUES
                     || instruction.type === INSTRUCTION_TYPE.ADD_LIST || instruction.type === INSTRUCTION_TYPE.SET_LIST
             ) {
             let message = List(instruction, _scope);
-            if (message != null) {
-                string += message + "\n";
+            if (message && message != '') {
+                string += message;
             }
         }
     });

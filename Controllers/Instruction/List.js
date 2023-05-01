@@ -6,13 +6,13 @@ const Operation = require("../Operations/Operation");
 function List(_instruction, _scope){
     if(_instruction.type === INSTRUCTION_TYPE.DEC_LIST){
         if(_instruction.data_type !== _instruction.create_type){
-            return `Error: El tipo de dato ${_instruction.data_type} no coincide con el tipo de dato ${_instruction.create_type} de la Lista. Linea: ${_instruction.line} Columna: ${_instruction.column}`;
+            return `Error: El tipo de dato ${_instruction.data_type} no coincide con el tipo de dato ${_instruction.create_type} de la Lista. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`;
         }
         let list_values = [];
         const newSymbol = new Symbol(_instruction.id, list_values, _instruction.data_type, _instruction.line, _instruction.column);
 
         if (_scope.existsSymbolInActualScope(newSymbol.id) != false) {
-            return "Error: ya existe un simbolo con el nombre " + newSymbol.id + " linea: " + newSymbol.line + " columna: " + newSymbol.column;
+            return "Error: ya existe un simbolo con el nombre " + newSymbol.id + " linea: " + newSymbol.line + " columna: " + newSymbol.column + "\n";
         }
         _scope.addSymbol(newSymbol.id, newSymbol);
         // console.log(_scope)
@@ -24,18 +24,18 @@ function List(_instruction, _scope){
                 const newSymbol = new Symbol(_instruction.id, list_values.value, _instruction.data_type, _instruction.line, _instruction.column);
 
                 if (_scope.existsSymbolInActualScope(newSymbol.id) != false) {
-                    return "Error: ya existe un simbolo con el nombre " + newSymbol.id + " linea: " + newSymbol.line + " columna: " + newSymbol.column;
+                    return "Error: ya existe un simbolo con el nombre " + newSymbol.id + " linea: " + newSymbol.line + " columna: " + newSymbol.column + "\n";
                 }
                 _scope.addSymbol(newSymbol.id, newSymbol);
                 return null;
             }else{
-                return `Error: No se puede asignar un valor de tipo ${list_values.type} a una lista de tipo ${_instruction.data_type} Linea ${_instruction.line} Columna ${_instruction.column}`;
+                return `Error: No se puede asignar un valor de tipo ${list_values.type} a una lista de tipo ${_instruction.data_type} Linea ${_instruction.line} Columna ${_instruction.column}\n`;
             }
         }else{
-            return `Error: El valor asignado no es una lista Linea ${_instruction.line} Columna ${_instruction.column}`;
+            return `Error: El valor asignado no es una lista Linea ${_instruction.line} Columna ${_instruction.column}\n`;
         }
     }else if(_instruction.type === INSTRUCTION_TYPE.ADD_LIST){
-        let message = '';
+        let message = "";
         const exists = _scope.existsSymbol(_instruction.id);
         if(exists){
             let value = null;
@@ -62,13 +62,13 @@ function List(_instruction, _scope){
                 _scope.setSymbol(_instruction.id, symbol);
                 return null;
             }else{
-                return `No se puede asignar un valor de tipo ${types.valueType} a un vector de tipo ${types.symbolType} Linea ${_instruction.line} y columna ${_instruction.column}`;
+                return `No se puede asignar un valor de tipo ${types.valueType} a un vector de tipo ${types.symbolType} Linea ${_instruction.line} y columna ${_instruction.column}\n`;
             }
         }else{
-            return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}`;
+            return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}\n`;
         }
     }else if(_instruction.type === INSTRUCTION_TYPE.SET_LIST){
-        let message = '';
+        let message = "";
         const exists = _scope.existsSymbol(_instruction.id);
         if(exists){
             let value = null;
@@ -96,35 +96,20 @@ function List(_instruction, _scope){
                     if(index.value >= 0 && index.value < symbol.value.length){
                         symbol.value[index.value] = value.value;
                     }else{
-                        return `El indice ${index.value} esta fuera de rango Linea ${_instruction.line} y columna ${_instruction.column}`;
+                        return `El indice ${index.value} esta fuera de rango Linea ${_instruction.line} y columna ${_instruction.column}\n`;
                     }
                 }else{
-                    return `El indice ${index.value} no es de tipo entero Linea ${_instruction.line} y columna ${_instruction.column}`;
+                    return `El indice ${index.value} no es de tipo entero Linea ${_instruction.line} y columna ${_instruction.column}\n`;
                 }
                 _scope.setSymbol(_instruction.id, symbol);
                 return null;
             }else{
-                return `No se puede asignar un valor de tipo ${types.valueType} a un vector de tipo ${types.symbolType} Linea ${_instruction.line} y columna ${_instruction.column}`;
+                return `No se puede asignar un valor de tipo ${types.valueType} a un vector de tipo ${types.symbolType} Linea ${_instruction.line} y columna ${_instruction.column}\n`;
             }
         }else{
-            return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}`;
+            return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}\n`;
         }
     }
 }
-
-/*function getValue(_type){
-    switch(_type){
-        case DATA_TYPE.INT:
-            return 0;
-        case DATA_TYPE.DOUBLE:
-            return 0.0;
-        case DATA_TYPE.CHAR:
-            return '\u0000';
-        case DATA_TYPE.STRING:
-            return "";
-        case DATA_TYPE.BOOL:
-            return true;
-    }
-}*/
 
 module.exports = List;

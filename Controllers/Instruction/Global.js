@@ -29,40 +29,40 @@ function Global(_instructions, _scope){
         
         if(_instructions[i].type===INSTRUCTION_TYPE.DECLARATION){
             let message = Declaration(_instructions[i],_scope);
-            if(message!=null){
-               string+= message+ "\n";
+            if(message && message != ""){
+               string+= message;
             }
         }else if(_instructions[i].type===INSTRUCTION_TYPE.ASSIGNMENT){
             let message = Assignment(_instructions[i],_scope);
-            if(message!=null){
-               string+= message+ "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
         }else if (_instructions[i].type === INSTRUCTION_TYPE.DEC_METHOD) {
             let message = DecMethod(_instructions[i], _scope);
-            if (message != null) {
-                string += message + "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
         }else if (_instructions[i].type === INSTRUCTION_TYPE.DEC_FUNC) {
             let message = DecFunction(_instructions[i], _scope);
-            if (message != null) {
-                string += message + "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
         }else if (
                        _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
                     || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR
             ){
             let message = Vector(_instructions[i], _scope);
-            if (message != null) {
-                string += message + "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
         }else if (
                        _instructions[i].type === INSTRUCTION_TYPE.DEC_LIST || _instructions[i].type === INSTRUCTION_TYPE.LIST_VALUES
                     || _instructions[i].type === INSTRUCTION_TYPE.ADD_LIST || _instructions[i].type === INSTRUCTION_TYPE.SET_LIST
             ){
             let message = List(_instructions[i], _scope);
-            if (message != null) {
-                string += message + "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
         }
 
     }
@@ -72,9 +72,9 @@ function Global(_instructions, _scope){
         if(_instructions[i].type===INSTRUCTION_TYPE.MAIN){
             let message = Main(_instructions[i],_scope);
             //console.log(message)
-            if(message!=null){
-                string+= message+ "\n";
-            }
+            if(message && message != ""){
+                string+= message;
+             }
             break;
         }
 

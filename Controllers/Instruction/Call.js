@@ -33,7 +33,7 @@ function Call(_instruction, _scope) {
                 let message = exe.string;
                 if(exe.continue){
                     return {
-                        string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                        string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}\n`
                     }
                 }
 
@@ -46,18 +46,18 @@ function Call(_instruction, _scope) {
                             }
                         }else{
                             return {
-                                string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                                string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                             }
                         }
                     }else{
                         return {
-                            string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                            string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                         }
                     }
                 } else {
                     if(exe.return){
                         return {
-                            string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                            string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                         }
                     }
                 }
@@ -66,7 +66,7 @@ function Call(_instruction, _scope) {
                 }
             }else{
                 return {
-                    string: `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                    string: `Error: La cantidad de parametros no coincide para el método ${_instruction.name}. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                 }
             }
         }else{
@@ -74,7 +74,7 @@ function Call(_instruction, _scope) {
             let message = exe.string;
             if(exe.continue){
                 return {
-                    string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}`
+                    string: `Error: No se puede usar continue fuera de un ciclo. Linea: ${exe.continue.line} Columna: ${exe.continue.column}\n`
                 }
             }
 
@@ -87,18 +87,18 @@ function Call(_instruction, _scope) {
                         }
                     }else{
                         return {
-                            string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                            string: `Error: El tipo de retorno no coincide con el tipo de la función. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                         }
                     }
                 }else{
                     return {
-                        string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                        string: `Error: La función ${_instruction.name} debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                     }
                 }
             } else {
                 if(exe.return){
                     return {
-                        string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}`
+                        string: `Error: El método ${_instruction.name} no debe retornar un valor. Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
                     }
                 }
             }
@@ -108,7 +108,7 @@ function Call(_instruction, _scope) {
        }
     }
     return {
-        string: `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}`
+        string: `Error: El método ${_instruction.name} no existe... Linea: ${_instruction.line} Columna: ${_instruction.column}\n`
     }
 }
 

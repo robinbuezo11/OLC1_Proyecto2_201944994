@@ -3,7 +3,7 @@ const Operation = require('../Operations/Operation');
 const Call = require('./Call');
 
 function Assignment(_instruction, _scope){
-    let message = '';
+    let message = "";
     let id = null;
     if(_instruction.type === INSTRUCTION_TYPE.INC || _instruction.type === INSTRUCTION_TYPE.DEC){
         id = _instruction.id.value;
@@ -25,7 +25,7 @@ function Assignment(_instruction, _scope){
         }else{
             value = Operation(_instruction.expression, _scope);
             if(!value.type){
-                return value.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}`;
+                return value.value + `\nNo se pudo obtener el valor de la expresion linea: ${_instruction.line} columna: ${_instruction.column}\n`;
             }
         }
         let symbol = _scope.getSymbol(id);
@@ -38,10 +38,10 @@ function Assignment(_instruction, _scope){
             _scope.setSymbol(id, symbol);
             return null;
         }else{
-            return `No se puede asignar un valor de tipo ${types.valueType} a una variable de tipo ${types.symbolType} en la linea ${_instruction.line} y columna ${_instruction.column}`;
+            return `No se puede asignar un valor de tipo ${types.valueType} a una variable de tipo ${types.symbolType} en la linea ${_instruction.line} y columna ${_instruction.column}\n`;
         }
     }else{
-        return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}`;
+        return `La variable ${id} no existe Linea ${_instruction.line} y columna ${_instruction.column}\n`;
     }
 }
 

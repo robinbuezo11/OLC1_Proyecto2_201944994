@@ -15,7 +15,7 @@ function Main(_instruction, _scope) {
                 for(let i=0;i<executeMethod.params.length;i++){
                     var assignDeclaration = Instruction.newDeclaration(executeMethod.params[i].id,_instruction.list_values[i],executeMethod.params[i].data_type,_instruction.line,_instruction.column);
                     let message = DecParam(assignDeclaration,newScope);
-                    if(message!=null){
+                    if(message!=null && message!=""){
                         error = true;
                         string += message+"\n";
                     }

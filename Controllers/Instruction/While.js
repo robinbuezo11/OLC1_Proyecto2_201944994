@@ -3,7 +3,7 @@ const DATA_TYPE = require('../Enums/DataType');
 const Operation = require('../Operations/Operation');
 
 function StatementWhile(_instruction, _scope){
-    let message = '';
+    let message = "";
     let operation = Operation(_instruction.expression, _scope);
 
     if(operation.type === DATA_TYPE.BOOL){
