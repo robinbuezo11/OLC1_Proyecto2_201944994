@@ -1,5 +1,6 @@
 import './App.css';
-import  { useState } from 'react';
+import  { useState, useRef} from 'react';
+import { saveAs } from 'file-saver';
 import MonacoEditor from 'react-monaco-editor';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
@@ -11,6 +12,7 @@ import axios from 'axios';
 function App() {
   const [code, setCode] = useState('');
   const [resultado, setResultado] = useState('');
+  const navDropdownRef = useRef(null);
 
   function analizar(){
     axios.post('http://localhost:5000/analyzer', {
@@ -26,19 +28,60 @@ function App() {
   }
 
   function graphAST(){
-    axios.get('http://localhost:5000/graphAST');
+    axios.get('http://localhost:5000/graphAST')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  function open(){
+    let win = window.open('http://localhost:3000/', '_blank');
+    win.focus();
+  }
+
+  function save(){
+    const blob = new Blob([code], {type: 'text/plain;charset=utf-8'});
+    saveAs(blob, 'file.tw');
+  }
+
+  function read(e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const fileReader = new FileReader();
+
+    fileReader.readAsText(file);
+    fileReader.onload = () => {
+      setCode(fileReader.result);
+    }
   }
 
   return (
     <div className="App">
       <header className="App-header">
-      <Navbar bg="secondary" variant='dark' id='nav'>
-      <Container id='nav'>
-        <Nav className="me-auto">
-          <NavDropdown className='navitm' title="Archivo" id="basic-nav-dropdown">
-            <NavDropdown.Item >Crear</NavDropdown.Item>
-            <NavDropdown.Item >Abrir</NavDropdown.Item>
-            <NavDropdown.Item >Guardar</NavDropdown.Item>
+      <Navbar bg="secondary" variant='dark' id='navbar'>
+      <Container id='cont-nav'>
+        <Nav id='nav' className="me-auto">
+          <NavDropdown className='navitm' title="Archivo" id="basic-nav-dropdown" ref={navDropdownRef}>
+            <NavDropdown.Item onClick={()=>{open()}}>Crear</NavDropdown.Item>
+            <label id='openinput'>
+                <input
+                  id='fileinput'
+                  type='file'
+                  accept='.tw'
+                  style={{display: 'none'}}
+                  multiple={false}
+                  onChange={(e)=>{
+                    read(e);
+                    navDropdownRef.current.querySelector('.dropdown-menu').classList.remove('show');
+                    document.getElementById('fileinput').value = '';
+                  }}>
+                </input>
+                <span id='openbt'>Abrir</span>
+            </label>
+            <NavDropdown.Item onClick={()=>{save()}}>Guardar</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown className='navitm' title="Reportes" id="basic-nav-dropdown">
             <NavDropdown.Item  onClick={()=>{graphAST()}}>Árbol AST</NavDropdown.Item>
@@ -50,7 +93,7 @@ function App() {
       </Container>
       </Navbar>
       </header>
-      <body className='Content'>
+      <div className='Content'>
         <div className='editores' >
           <div className='containerE'>
             <div className="editor1">
@@ -72,7 +115,7 @@ function App() {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </div>
   );
 }
