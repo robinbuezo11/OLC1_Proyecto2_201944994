@@ -62,7 +62,29 @@ class Grapher{
                 this.id++;
                 this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
-                this.graphVectorAssignment(instruction, childName);
+                this.graphStructAssignment(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DECLARACION LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphListDeclaration(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.ADD_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ADD LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                let id = "Node" + this.id;
+                this.id++;
+                this.graph += id + `[label=\"ID\n${instruction.id}\"];\n`;
+                this.graph += childName + "->" + id + ";\n";
+                this.graphOperation(instruction.value, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.SET_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ASIGNACION LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphStructAssignment(instruction, childName);
             }
         });
     }
@@ -165,7 +187,29 @@ class Grapher{
                 this.id++;
                 this.graph += childName + "[label=\"ASIGNACION VECTOR\"];\n";
                 this.graph += _parent + "->" + childName + ";\n";
-                this.graphVectorAssignment(instruction, childName);
+                this.graphStructAssignment(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.DEC_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"DECLARACION LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphListDeclaration(instruction, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.ADD_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ADD LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                let id = "Node" + this.id;
+                this.id++;
+                this.graph += id + `[label=\"ID\n${instruction.id}\"];\n`;
+                this.graph += childName + "->" + id + ";\n";
+                this.graphOperation(instruction.value, childName);
+            } else if(instruction.type === INSTRUCTION_TYPE.SET_LIST){
+                let childName = "Node" + this.id;
+                this.id++;
+                this.graph += childName + "[label=\"ASIGNACION LISTA\"];\n";
+                this.graph += _parent + "->" + childName + ";\n";
+                this.graphStructAssignment(instruction, childName);
             }
         });
     }
@@ -240,6 +284,20 @@ class Grapher{
             let childName = "Node" + this.id;
             this.id++;
             this.graph += childName + "[label=\"ACCESO VECTOR\"];\n";
+            this.graph += _parent + "->" + childName + ";\n";
+            let varName = `Node${this.id}`;
+            this.id++;
+            this.graph += varName + `[label=\"ID\n${_expression.id}\"];\n`;
+            this.graph += childName + "->" + varName + ";\n";
+            let index = `Node${this.id}`;
+            this.id++;
+            this.graph += index + `[label=\"POSICION\"];\n`;
+            this.graph += childName + "->" + index + ";\n";
+            this.graphOperation(_expression.index, index);
+        }else if(_expression.type === INSTRUCTION_TYPE.LIST_ACCESS){
+            let childName = "Node" + this.id;
+            this.id++;
+            this.graph += childName + "[label=\"ACCESO LISTA\"];\n";
             this.graph += _parent + "->" + childName + ";\n";
             let varName = `Node${this.id}`;
             this.id++;
@@ -374,7 +432,7 @@ class Grapher{
         }
     }
 
-    graphVectorAssignment(_instruction, _parent){
+    graphStructAssignment(_instruction, _parent){
         let id = `Node${this.id}`;
         this.id++;
         this.graph += id + `[label=\"ID \n ${_instruction.id}\"];\n`;
@@ -391,6 +449,17 @@ class Grapher{
             this.graph += _parent + "->" + value + ";\n";
             this.graphOperation(_instruction.value, value);
         }
+    }
+
+    graphListDeclaration(_instruction, _parent){
+        let varType = `Node${this.id}`;
+        this.id++;
+        this.graph += varType + `[label=\"TIPO \n ${_instruction.data_type}\"];\n`;
+        this.graph += _parent + "->" + varType + ";\n";
+        let id = `Node${this.id}`;
+        this.id++;
+        this.graph += id + `[label=\"ID \n ${_instruction.id}\"];\n`;
+        this.graph += _parent + "->" + id + ";\n";
     }
 
     graphTernary(_instruction, _parent){

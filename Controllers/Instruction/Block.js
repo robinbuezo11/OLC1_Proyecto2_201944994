@@ -11,6 +11,7 @@ const StatementFor = require("./For");
 const StatementDoWhile = require("./DoWhile");
 const Call = require("./Call");
 const Vector = require("./Vector");
+const List = require("./List");
 const Return = require("./Return");
 
 function Block(_instructions,_scope){
@@ -129,9 +130,18 @@ function Block(_instructions,_scope){
                 string += message;
             }
         } else if (
-                    _instructions[i].type === INSTRUCTION_TYPE.VECTOR_NULL || _instructions[i].type === INSTRUCTION_TYPE.VECTOR_VALUES
-                    || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR){
-            let message = Vector(_instructions[i], _scope);
+                    instruction.type === INSTRUCTION_TYPE.VECTOR_NULL || instruction.type === INSTRUCTION_TYPE.VECTOR_VALUES
+                    || instruction.type === INSTRUCTION_TYPE.SET_VECTOR
+            ){
+            let message = Vector(instruction, _scope);
+            if (message != null) {
+                string += message + "\n";
+            }
+        } else if (
+                    instruction.type === INSTRUCTION_TYPE.DEC_LIST || instruction.type === INSTRUCTION_TYPE.ADD_LIST
+                    || instruction.type === INSTRUCTION_TYPE.SET_LIST
+            ) {
+            let message = List(instruction, _scope);
             if (message != null) {
                 string += message + "\n";
             }

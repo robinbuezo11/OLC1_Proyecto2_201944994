@@ -13,7 +13,7 @@ function Operation(_exp, _scope){
     if( 
            _exp.type === VALUE_TYPE.DOUBLE || _exp.type === VALUE_TYPE.BOOL || _exp.type === VALUE_TYPE.INT 
         || _exp.type === VALUE_TYPE.STRING || _exp.type === VALUE_TYPE.CHAR || _exp.type === VALUE_TYPE.ID
-        || _exp.type === INSTRUCTION_TYPE.VECTOR_ACCESS
+        || _exp.type === INSTRUCTION_TYPE.VECTOR_ACCESS || _exp.type === INSTRUCTION_TYPE.LIST_ACCESS
         ){
         return ExpressionValue(_exp, _scope);
     }else if(

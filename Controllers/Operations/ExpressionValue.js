@@ -54,7 +54,7 @@ function ExpressionValue(_expression, _scope){
             line: _expression.line,
             column: _expression.column
         };
-    }else if(_expression.type == INSTRUCTION_TYPE.VECTOR_ACCESS){
+    }else if(_expression.type === INSTRUCTION_TYPE.VECTOR_ACCESS || _expression.type === INSTRUCTION_TYPE.LIST_ACCESS){
         const symbol = _scope.getSymbol(_expression.id);
         if(symbol){
             const Operation = require('./Operation');
@@ -69,7 +69,7 @@ function ExpressionValue(_expression, _scope){
                     };
                 }
                 return {
-                    value: "Error: El indice " + index.value + " esta fuera de los limites del vector " + _expression.id + " Linea: " + _expression.line + " Columna: " + _expression.column,
+                    value: "Error: El indice " + index.value + " esta fuera de los limites de la estructura " + _expression.id + " Linea: " + _expression.line + " Columna: " + _expression.column,
                     type: null,
                     line: _expression.line,
                     column: _expression.column
@@ -83,7 +83,7 @@ function ExpressionValue(_expression, _scope){
             };
         }
         return {
-            value: "Error: El vector " + _expression.id + " no existe Linea: " + _expression.line + " Columna: " + _expression.column,
+            value: "Error: La estructura " + _expression.id + " no existe Linea: " + _expression.line + " Columna: " + _expression.column,
             type: null,
             line: _expression.line,
             column: _expression.column

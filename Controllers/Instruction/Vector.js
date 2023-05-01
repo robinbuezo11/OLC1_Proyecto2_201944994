@@ -18,6 +18,9 @@ function Vector(_instruction, _scope){
                 }
             }else{
                 value = Operation(_instruction.value, _scope);
+                if(!value.type){
+                    return value.value;
+                }
             }
             let symbol = _scope.getSymbol(_instruction.id);
             let types = {
@@ -25,7 +28,16 @@ function Vector(_instruction, _scope){
                 valueType: value.type
             }
             if(types.symbolType === types.valueType){
-                symbol.value[_instruction.index.value] = value.value;
+                let index = Operation(_instruction.index, _scope);
+                if(index.type === DATA_TYPE.INT){
+                    if(index.value >= 0 && index.value < symbol.value.length){
+                        symbol.value[index.value] = value.value;
+                    }else{
+                        return `El indice ${index.value} no existe en el vector Linea ${_instruction.line} y columna ${_instruction.column}`;
+                    }
+                }else{
+                    return `El indice ${index.value} no es de tipo entero Linea ${_instruction.line} y columna ${_instruction.column}`;
+                }
                 _scope.setSymbol(_instruction.id, symbol);
                 return null;
             }else{

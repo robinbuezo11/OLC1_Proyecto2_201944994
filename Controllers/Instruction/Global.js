@@ -4,6 +4,7 @@ const Declaration = require("./Declaration");
 const DecMethod = require("./DecMethod");
 const DecFunction = require("./DecFunction");
 const Vector = require("./Vector");
+const List = require("./List");
 const Main = require("./Main");
 
 
@@ -51,6 +52,14 @@ function Global(_instructions, _scope){
                     || _instructions[i].type === INSTRUCTION_TYPE.SET_VECTOR
             ){
             let message = Vector(_instructions[i], _scope);
+            if (message != null) {
+                string += message + "\n";
+            }
+        }else if (
+                    _instructions[i].type === INSTRUCTION_TYPE.DEC_LIST || _instructions[i].type === INSTRUCTION_TYPE.ADD_LIST
+                    || _instructions[i].type === INSTRUCTION_TYPE.SET_LIST
+            ){
+            let message = List(_instructions[i], _scope);
             if (message != null) {
                 string += message + "\n";
             }

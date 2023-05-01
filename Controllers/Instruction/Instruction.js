@@ -263,6 +263,40 @@ const Instruction = {
             line: _line,
             column: _column
         };
+    },newList: function(_type, _id, _create_type, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.DEC_LIST,
+            data_type: _type,
+            id: _id,
+            create_type: _create_type,
+            line: _line,
+            column: _column
+        };
+    },newAddList: function(_id, _value, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.ADD_LIST,
+            id: _id,
+            value: _value,
+            line: _line,
+            column: _column
+        };
+    },newListAccess: function(_id, _index, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.LIST_ACCESS,
+            id: _id,
+            index: _index,
+            line: _line,
+            column: _column
+        };
+    },newSetList: function(_id, _index, _value, _line, _column){
+        return {
+            type: INSTRUCTION_TYPE.SET_LIST,
+            id: _id,
+            index: _index,
+            value: _value,
+            line: _line,
+            column: _column
+        };
     },newBinaryOperation: function(_opLeft, _opRight, _type, _line, _column){
         return newOperation(_opLeft, _opRight, _type, _line, _column);
     },newUnaryOperation: function(_op, _type, _line, _column){

@@ -1,6 +1,6 @@
 const VALUE_TYPE = {
     INT:            'VAL_INT',
-    DOUBLE:          'VAL_DOUBLE',
+    DOUBLE:         'VAL_DOUBLE',
     BOOL:           'VAL_BOOL',
     CHAR:           'VAL_CHAR',
     STRING:         'VAL_STRING',

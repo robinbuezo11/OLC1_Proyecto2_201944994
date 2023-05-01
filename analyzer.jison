@@ -50,6 +50,7 @@
 "="					return 'same';
 
 ","					return 'comma';
+"."					return 'dot';
 
 "[[" 				return 'oDouSquare';
 "]]"				return 'cDouSquare';
@@ -75,6 +76,7 @@
 "true"				return 'Rtrue';
 "false"				return 'Rfalse';
 "main"				return 'Rmain';
+"list"              return 'Rlist';
 "new"				return 'Rnew';
 "add"				return 'Radd';
 "toLower"			return 'RtoLower';
@@ -148,15 +150,15 @@ BODY
 ;
 
 
-METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, null, $6, this._$.first_line,this._$.first_column+1)}
-        |Rvoid id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newMethod($2, $4, $7, this._$.first_line,this._$.first_column+1)}
-        |TYPE id parLeft parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFunction($1, $2, null, $6, this._$.first_line,this._$.first_column+1)}
-        |TYPE id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFunction($1, $2, $4, $7, this._$.first_line,this._$.first_column+1)}
+METHODS: Rvoid id parLeft parRight oBracke INSTRUCTIONS cBracke         {$$ = INSTRUCTION.newMethod($2, null, $6, this._$.first_line,this._$.first_column+1)}
+        |Rvoid id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke  {$$ = INSTRUCTION.newMethod($2, $4, $7, this._$.first_line,this._$.first_column+1)}
+        |TYPE id parLeft parRight oBracke INSTRUCTIONS cBracke          {$$ = INSTRUCTION.newFunction($1, $2, null, $6, this._$.first_line,this._$.first_column+1)}
+        |TYPE id parLeft PARAMS parRight oBracke INSTRUCTIONS cBracke   {$$ = INSTRUCTION.newFunction($1, $2, $4, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
 PARAMS
-    : PARAMS comma PARAM {$1.push($3); $$ = $1;}
-    | PARAM {$$ = [$1];}
+    : PARAMS comma PARAM    {$1.push($3); $$ = $1;}
+    | PARAM                 {$$ = [$1];}
 ;
 
 PARAM: TYPE id {$$ = INSTRUCTION.newDeclaration($2, null, $1, this._$.first_line,this._$.first_column+1);}
@@ -167,13 +169,13 @@ CALL: id parLeft parRight             {$$ = INSTRUCTION.newCall($1, null, this._
 ;
 
 MAIN
-    : Rmain id parLeft parRight semiColon {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
-    | Rmain id parLeft PARAMS_CALL parRight semiColon {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
+    : Rmain id parLeft parRight semiColon               {$$ = INSTRUCTION.newMain($2, null, this._$.first_line,this._$.first_column+1)}
+    | Rmain id parLeft PARAMS_CALL parRight semiColon   {$$ = INSTRUCTION.newMain($2, $4, this._$.first_line,this._$.first_column+1)}     
 ;
 
 PARAMS_CALL
-    : PARAMS_CALL comma EXPRESSION {$1.push($3); $$ = $1;}
-    | EXPRESSION {$$ = [$1];}
+    : PARAMS_CALL comma EXPRESSION  {$1.push($3); $$ = $1;}
+    | EXPRESSION                    {$$ = [$1];}
 ;
 
 DEC_VAR: TYPE id                    {$$= INSTRUCTION.newDeclaration($2,null, $1,this._$.first_line, this._$.first_column+1)}
@@ -216,26 +218,27 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
 ;
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}
 ;
-IF: Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIf($3, $6, this._$.first_line,this._$.first_column+1)}
-    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke Relse oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIfElse($3, $6, $10, this._$.first_line,this._$.first_column+1)}
-    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke ELSEIF {$$ = INSTRUCTION.newIfElseIf($3, $6, $8, null, this._$.first_line,this._$.first_column+1)}
+
+IF: Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke                                            {$$ = INSTRUCTION.newIf($3, $6, this._$.first_line,this._$.first_column+1)}
+    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke Relse oBracke INSTRUCTIONS cBracke        {$$ = INSTRUCTION.newIfElse($3, $6, $10, this._$.first_line,this._$.first_column+1)}
+    |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke ELSEIF                                    {$$ = INSTRUCTION.newIfElseIf($3, $6, $8, null, this._$.first_line,this._$.first_column+1)}
     |Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke ELSEIF Relse oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newIfElseIf($3, $6, $8, $11, this._$.first_line,this._$.first_column+1)}
 ;
 
-ELSEIF: ELSEIF EIF {$1.push($2); $$ = $1;}
-        |EIF {$$ = [$1];}
+ELSEIF: ELSEIF EIF  {$1.push($2); $$ = $1;}
+        |EIF        {$$ = [$1];}
 ;
 
 EIF: Relse Rif parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newElseIf($4, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
-SWITCH: Rswitch parLeft EXPRESSION parRight oBracke CASES DEFAULT cBracke {$$ = INSTRUCTION.newSwitch($3, $6, $7, this._$.first_line,this._$.first_column+1)}
-        | Rswitch parLeft EXPRESSION parRight oBracke CASES cBracke {$$ = INSTRUCTION.newSwitch($3, $6, null, this._$.first_line,this._$.first_column+1)}
-        | Rswitch parLeft EXPRESSION parRight oBracke DEFAULT cBracke {$$ = INSTRUCTION.newSwitch($3, null, $6, this._$.first_line,this._$.first_column+1)}
+SWITCH: Rswitch parLeft EXPRESSION parRight oBracke CASES DEFAULT cBracke   {$$ = INSTRUCTION.newSwitch($3, $6, $7, this._$.first_line,this._$.first_column+1)}
+        | Rswitch parLeft EXPRESSION parRight oBracke CASES cBracke         {$$ = INSTRUCTION.newSwitch($3, $6, null, this._$.first_line,this._$.first_column+1)}
+        | Rswitch parLeft EXPRESSION parRight oBracke DEFAULT cBracke       {$$ = INSTRUCTION.newSwitch($3, null, $6, this._$.first_line,this._$.first_column+1)}
 ;
 
-CASES: CASES CASE {$1.push($2); $$ = $1;}
-    |CASE {$$ = [$1];}
+CASES: CASES CASE   {$1.push($2); $$ = $1;}
+    |CASE           {$$ = [$1];}
 ;
 
 CASE: Rcase EXPRESSION colon INSTRUCTIONS {$$ = INSTRUCTION.newCase($2, $4, this._$.first_line,this._$.first_column+1)}
@@ -247,54 +250,58 @@ DEFAULT: Rdefault colon INSTRUCTIONS {$$ = INSTRUCTION.newDefault($3, this._$.fi
 WHILE: Rwhile parLeft EXPRESSION parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newWhile($3, $6, this._$.first_line,this._$.first_column+1)}
 ;
 
-FOR: Rfor parLeft DEC_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
-    | Rfor parLeft ASIG_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
+FOR: Rfor parLeft DEC_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke     {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
+    | Rfor parLeft ASIG_VAR semiColon EXPRESSION semiColon ASIG_VAR parRight oBracke INSTRUCTIONS cBracke   {$$ = INSTRUCTION.newFor($3, $5, $7, $10, this._$.first_line,this._$.first_column+1)}
 ;
 
 DO_WHILE: Rdo oBracke INSTRUCTIONS cBracke Rwhile parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newDoWhile($3, $7, this._$.first_line,this._$.first_column+1)}
 ;
 
-RETURN: Rreturn EXPRESSION semiColon {$$ = INSTRUCTION.newReturn($2, this._$.first_line,this._$.first_column+1)}
-        |Rreturn semiColon {$$ = INSTRUCTION.newReturn(null, this._$.first_line,this._$.first_column+1)}
+RETURN: Rreturn EXPRESSION semiColon    {$$ = INSTRUCTION.newReturn($2, this._$.first_line,this._$.first_column+1)}
+        |Rreturn semiColon              {$$ = INSTRUCTION.newReturn(null, this._$.first_line,this._$.first_column+1)}
 ;
 
 DEC_STRUCT: TYPE oSquare cSquare id same Rnew TYPE oSquare EXPRESSION cSquare semiColon {$$ = INSTRUCTION.newVectorNull($1, $4, $7, $9, this._$.first_line,this._$.first_column+1)}
-            |TYPE oSquare cSquare id same oBracke LIST_VALUES cBracke semiColon {$$ = INSTRUCTION.newVectorValues($1, $4, $7, this._$.first_line,this._$.first_column+1)}
+            |TYPE oSquare cSquare id same oBracke LIST_VALUES cBracke semiColon         {$$ = INSTRUCTION.newVectorValues($1, $4, $7, this._$.first_line,this._$.first_column+1)}
+            |Rlist less TYPE greater id same Rnew Rlist less TYPE greater semiColon     {$$ = INSTRUCTION.newList($3, $5, $10, this._$.first_line,this._$.first_column+1)}
 ;
 
-LIST_VALUES: LIST_VALUES comma EXPRESSION {$1.push($3); $$ = $1;}
-            |EXPRESSION {$$ = [$1];}
+LIST_VALUES: LIST_VALUES comma EXPRESSION   {$1.push($3); $$ = $1;}
+            |EXPRESSION                     {$$ = [$1];}
 ;
 
-SET_STRUCT: id oSquare EXPRESSION cSquare same EXPRESSION semiColon {$$ = INSTRUCTION.newSetVector($1, $3, $6, this._$.first_line,this._$.first_column+1)}
+SET_STRUCT: id oSquare EXPRESSION cSquare same EXPRESSION semiColon         {$$ = INSTRUCTION.newSetVector($1, $3, $6, this._$.first_line,this._$.first_column+1)}
+            |id dot Radd parLeft EXPRESSION parRight semiColon              {$$ = INSTRUCTION.newAddList($1, $5, this._$.first_line,this._$.first_column+1)}
+            |id oDouSquare EXPRESSION cDouSquare same EXPRESSION semiColon  {$$ = INSTRUCTION.newSetList($1, $3, $6, this._$.first_line,this._$.first_column+1)}
 ;
 
-EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$ = INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}
-        | EXPRESSION sum EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION sub EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION mul EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION div EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION pow EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION mod EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION less EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION greater EXPRESSION    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATER,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION lessEq EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION greaterEq EXPRESSION  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION equals EXPRESSION     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}         
-        | EXPRESSION diff EXPRESSION       {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION and EXPRESSION        {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
-        | EXPRESSION or EXPRESSION         {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
-        | parLeft TYPE parRight EXPRESSION %prec cast   {$$ = INSTRUCTION.newCast($2, $4, this._$.first_line,this._$.first_column+1)}
-        | not EXPRESSION                   {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
-		| sub EXPRESSION       %prec usub  {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
-        | parLeft EXPRESSION parRight      {$$=$2}
-        | CALL                             {$$=$1}
-        | id oSquare EXPRESSION cSquare    {$$= INSTRUCTION.newVectorAccess($1,$3,this._$.first_line, this._$.first_column+1);}
-        | double                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
-        | int                              {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
-        | Rtrue                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-        | Rfalse                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
-        | string                           {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
-        | id                               {$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
-        | char                             {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
+EXPRESSION: EXPRESSION tern EXPRESSION colon EXPRESSION {$$= INSTRUCTION.newTernary($1, $3, $5, this._$.first_line,this._$.first_column+1)}
+        | EXPRESSION sum EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.ADD,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION sub EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.SUB,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION mul EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MUL,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION div EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIV,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION pow EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.POW,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION mod EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.MOD,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION less EXPRESSION                    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESS,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION greater EXPRESSION                 {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATER,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION lessEq EXPRESSION                  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.LESSEQ,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION greaterEq EXPRESSION               {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.GREATEREQ,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION equals EXPRESSION                  {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.EQUALS,this._$.first_line, this._$.first_column+1);}         
+        | EXPRESSION diff EXPRESSION                    {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.DIFF,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION and EXPRESSION                     {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.AND,this._$.first_line, this._$.first_column+1);}
+        | EXPRESSION or EXPRESSION                      {$$= INSTRUCTION.newBinaryOperation($1,$3, OPERATION_TYPE.OR,this._$.first_line, this._$.first_column+1);}
+        | parLeft TYPE parRight EXPRESSION %prec cast   {$$= INSTRUCTION.newCast($2, $4, this._$.first_line,this._$.first_column+1)}
+        | not EXPRESSION                                {$$= INSTRUCTION.newBinaryOperation(null,$2, OPERATION_TYPE.NOT,this._$.first_line, this._$.first_column+1);}
+		| sub EXPRESSION       %prec usub               {$$= INSTRUCTION.newUnaryOperation($2, OPERATION_TYPE.UNARY,this._$.first_line, this._$.first_column+1);}
+        | parLeft EXPRESSION parRight                   {$$=$2}
+        | CALL                                          {$$=$1}
+        | id oSquare EXPRESSION cSquare                 {$$= INSTRUCTION.newVectorAccess($1,$3,this._$.first_line, this._$.first_column+1);}
+        | id oDouSquare EXPRESSION cDouSquare           {$$= INSTRUCTION.newListAccess($1,$3,this._$.first_line, this._$.first_column+1);}
+        | double                                        {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.DOUBLE,this._$.first_line, this._$.first_column+1);}
+        | int                                           {$$= INSTRUCTION.newValue(Number($1),VALUE_TYPE.INT,this._$.first_line, this._$.first_column+1);}
+        | Rtrue                                         {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+        | Rfalse                                        {$$= INSTRUCTION.newValue($1,VALUE_TYPE.BOOL,this._$.first_line, this._$.first_column+1);}
+        | string                                        {$$= INSTRUCTION.newValue($1,VALUE_TYPE.STRING,this._$.first_line, this._$.first_column+1);}
+        | id                                            {$$= INSTRUCTION.newValue($1,VALUE_TYPE.ID,this._$.first_line, this._$.first_column+1);}
+        | char                                          {$$= INSTRUCTION.newValue($1,VALUE_TYPE.CHAR,this._$.first_line, this._$.first_column+1);}
 ;
