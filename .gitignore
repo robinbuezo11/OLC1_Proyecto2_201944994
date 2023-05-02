@@ -1,3 +1,4 @@
 /node_modules
-/Controllers/AST/*.dot
-/Controllers/AST/*.png
+/Controllers/Reportes/*.dot
+/Controllers/Reportes/*.png
+/Controllers/Reportes/*.html

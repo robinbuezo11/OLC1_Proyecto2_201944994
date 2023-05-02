@@ -8,11 +8,13 @@ function StatementSwitch(_instruction, _scope){
 
     if(operation.value){
         let parentScope = new Scope(_scope, 'Switch');
+        _scope.addChildren(parentScope);
 
         for(i=0; i<_instruction.cases.length; i++){
             let op = Operation(_instruction.cases[i].expression, parentScope);
             if(op.value == operation.value){
                 let newScope = new Scope(parentScope, 'Case');
+                parentScope.addChildren(newScope);
                 const Block = require('./Block');
                 let exe = Block(_instruction.cases[i].instructions, newScope);
                 message += exe.string;
@@ -29,6 +31,7 @@ function StatementSwitch(_instruction, _scope){
 
         if(_instruction.default){
             let newScope = new Scope(parentScope, 'Default');
+            parentScope.addChildren(newScope);
             const Block = require('./Block');
             let exe = Block(_instruction.default.instructions, newScope);
             message += exe.string;

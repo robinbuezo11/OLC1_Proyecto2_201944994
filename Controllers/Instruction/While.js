@@ -9,6 +9,7 @@ function StatementWhile(_instruction, _scope){
     if(operation.type === DATA_TYPE.BOOL){
         while(operation.value){
             let parentScope = new Scope(_scope, 'While');
+            _scope.addChildren(parentScope);
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;

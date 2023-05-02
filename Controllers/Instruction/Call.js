@@ -11,6 +11,7 @@ function Call(_instruction, _scope) {
     let string;
     if(execute){
         let newScope = new Scope(_scope,"CALL");
+        _scope.addChildren(newScope);
         const Block = require("./Block");
         if(execute.params!=null){
             if(_instruction.list_values!=null && _instruction.list_values.length==execute.params.length){

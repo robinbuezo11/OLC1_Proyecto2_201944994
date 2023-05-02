@@ -37,6 +37,26 @@ function App() {
     });
   }
 
+  function generateSymbols(){
+    axios.get('http://localhost:5000/generateSymbols')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  function generateErrors(){
+    axios.get('http://localhost:5000/generateErrors')
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   function open(){
     let win = window.open('http://localhost:3000/', '_blank');
     win.focus();
@@ -54,6 +74,7 @@ function App() {
 
     fileReader.readAsText(file);
     fileReader.onload = () => {
+      setCode('');
       setCode(fileReader.result);
     }
   }
@@ -84,9 +105,9 @@ function App() {
             <NavDropdown.Item onClick={()=>{save()}}>Guardar</NavDropdown.Item>
           </NavDropdown>
           <NavDropdown className='navitm' title="Reportes" id="basic-nav-dropdown">
-            <NavDropdown.Item  onClick={()=>{graphAST()}}>Árbol AST</NavDropdown.Item>
-            <NavDropdown.Item >Tabla de Símbolos</NavDropdown.Item>
-            <NavDropdown.Item >Tabla de Errores</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>{graphAST()}}>Árbol AST</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>{generateSymbols()}}>Tabla de Símbolos</NavDropdown.Item>
+            <NavDropdown.Item onClick={()=>{generateErrors()}}>Tabla de Errores</NavDropdown.Item>
           </NavDropdown>
           <Nav.Link className='navitm' onClick={()=>{analizar()} }>Ejecutar</Nav.Link>
         </Nav>

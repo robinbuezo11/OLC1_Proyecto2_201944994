@@ -9,6 +9,7 @@ function StatementIfElse(_instruction, _scope){
     if(operation.type === DATA_TYPE.BOOL){
         if(operation.value){
             let newScope = new Scope(_scope, "If");
+            _scope.addChildren(newScope);
             const Block = require("./Block");
             let exe = Block(_instruction.instructions, newScope);
             message += exe.string;
@@ -22,6 +23,7 @@ function StatementIfElse(_instruction, _scope){
             }
         }else{
             let newScope = new Scope(_scope, "Else");
+            _scope.addChildren(newScope);
             const Block = require("./Block");
             let exe = Block(_instruction.elseInstructions, newScope);
             message += exe.string;

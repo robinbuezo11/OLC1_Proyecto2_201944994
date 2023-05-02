@@ -9,6 +9,7 @@ function Main(_instruction, _scope) {
     let string;
     if(executeMethod!=null){
         let newScope = new Scope(_scope,"Main");
+        _scope.addChildren(newScope);
         if(executeMethod.params!=null){
             if(_instruction.list_values!=null && _instruction.list_values.length==executeMethod.params.length){
                 let error = false;

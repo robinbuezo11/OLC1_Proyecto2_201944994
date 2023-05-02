@@ -1,3 +1,7 @@
+%{
+    let errors = [];
+%}
+
 /* Definición Léxica */
 %lex
 
@@ -98,7 +102,10 @@
 
 
 <<EOF>>				return 'EOF';
-.					{ console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.					{ 
+                        console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); 
+                        errors.push({type:'Léxico', value: 'Este es un error léxico: ' + yytext, line: yylloc.first_line, column: yylloc.first_column});
+                    }
 
 /lex
 
@@ -131,7 +138,12 @@
 INI
 	: INSTRUCTIONSBODY EOF {
 		// When input is recognized we return the AST
-		return $1;
+        let err = errors;
+        errors = [];
+		return { 
+            errors: err,
+            ast: $1
+        };
 	}
 ;
 
@@ -147,6 +159,11 @@ BODY
     |MAIN                   {$$=$1;} 
     |DEC_STRUCT             {$$=$1;}
     |SET_STRUCT             {$$=$1;}
+
+    |error                  { 
+                                    console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                                    errors.push({type:'Sintáctico', value:'Este es un error sintáctico: ' + yytext, line: this._$.first_line, column: this._$.first_column});
+                                }
 ;
 
 
@@ -213,7 +230,10 @@ INSTRUCTION: DEC_VAR semiColon  {$$=$1;}                                        
         |Rcontinue semiColon    {$$= INSTRUCTION.newContinue(this._$.first_line,this._$.first_column+1);}
         |RETURN                 {$$=$1;}
 
-        |error                  { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+        |error                  { 
+                                    console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); 
+                                    errors.push({type:'Sintáctico', value:'Este es un error sintáctico: ' + yytext, line: this._$.first_line, column: this._$.first_column});
+                                }
 
 ;
 PRINT: Rprint parLeft EXPRESSION parRight semiColon {$$ = INSTRUCTION.newPrint($3, this._$.first_line,this._$.first_column+1)}

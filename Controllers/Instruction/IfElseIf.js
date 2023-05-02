@@ -9,6 +9,7 @@ function StatementIfElseIf(_instruction, _scope){
     if(operation.type === DATA_TYPE.BOOL){
         if(operation.value){
             let newScope = new Scope(_scope, "If");
+            _scope.addChildren(newScope);
             const Block = require("./Block");
             let exe = Block(_instruction.instructions, newScope);
             message += exe.string;
@@ -28,6 +29,7 @@ function StatementIfElseIf(_instruction, _scope){
             let op = Operation(_instruction.list_elseif[i].expression, _scope);
             if(op.value){
                 let newScope = new Scope(_scope, "Else If");
+                _scope.addChildren(newScope);
                 const Block = require("./Block");
                 let exe = Block(_instruction.list_elseif[i].instructions, newScope);
                 message += exe.string;
@@ -46,6 +48,7 @@ function StatementIfElseIf(_instruction, _scope){
         }
         if(_instruction.elseInstructions != null){
             let newScope = new Scope(_scope, "Else");
+            _scope.addChildren(newScope);
             const Block = require("./Block");
             let exe = Block(_instruction.elseInstructions, newScope);
             message += exe.string;

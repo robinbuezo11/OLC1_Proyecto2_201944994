@@ -18,6 +18,7 @@ function StatementFor(_instruction, _scope){
     }
 
     let parent = new Scope(_scope, 'For');
+    _scope.addChildren(parent);
 
     if(_instruction.declaration.type === INSTRUCTION_TYPE.DECLARATION){
         const Declaration = require('./Declaration');
@@ -31,6 +32,7 @@ function StatementFor(_instruction, _scope){
     if(operation.type === DATA_TYPE.BOOL){
         while(operation.value){
             let parentScope = new Scope(parent, 'For');
+            parent.addChildren(parentScope);
             const Block = require('./Block');
             let exe = Block(_instruction.instructions, parentScope);
             message += exe.string;

@@ -8,6 +8,7 @@ function StatementIf(_instruction, _scope){
     if(operation.type === DATA_TYPE.BOOL){
         if(operation.value){
             let newScope = new Scope(_scope,"if");
+            _scope.addChildren(newScope);
             const Block = require('./Block');
             let exec = Block(_instruction.instructions, newScope);
             message += exec.string;
