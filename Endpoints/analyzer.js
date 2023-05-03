@@ -22,10 +22,11 @@ module.exports=(parser, app)=>{
 
         let result= {
             tree: ast,
-            result:string
+            result:string,
+            errors:errors
         }
            
-        res.send(result)
+        res.send(result);
     });
 
     app.get('/graphAST',(req,res)=>{

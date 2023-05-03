@@ -20,7 +20,11 @@ function App() {
     })
     .then(function (response) {
       console.log(response);
-      setResultado(response.data.result);
+      if(response.data.errors.length > 0){
+        setResultado(response.data.result + '\n' + '--- Se encontraron errores en el código ---');
+      }else{
+        setResultado(response.data.result);
+      }
     })
     .catch(function (error) {
       console.log(error);
