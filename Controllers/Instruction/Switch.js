@@ -6,7 +6,7 @@ function StatementSwitch(_instruction, _scope){
     let message = "";
     let operation = Operation(_instruction.expression, _scope);
 
-    if(operation.value){
+    if(operation.value != null){
         let parentScope = new Scope(_scope, 'Switch');
         _scope.addChildren(parentScope);
 
@@ -47,6 +47,10 @@ function StatementSwitch(_instruction, _scope){
 
         return {
             string: message
+        }
+    }else{
+        return {
+            string: "Error: No se puede evaluar la expresion en el switch"
         }
     }
 }

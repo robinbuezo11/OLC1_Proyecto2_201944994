@@ -131,7 +131,9 @@ class Grapher{
                 for(let i = 0; i < instruction.list_elseif.length; i++){
                     this.graphElseIf(instruction.list_elseif[i].instructions, childName);
                 }
-                this.graphElse(instruction.elseInstructions, childName);
+                if(instruction.elseInstructions){
+                    this.graphElse(instruction.elseInstructions, childName);
+                }
             } else if(instruction.type === INSTRUCTION_TYPE.SWITCH){
                 let childName = "Node" + this.id;
                 this.id++;
